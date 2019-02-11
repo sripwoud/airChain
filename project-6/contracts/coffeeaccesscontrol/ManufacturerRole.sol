@@ -11,41 +11,43 @@ contract ManufacturerRole {
   event ManufacturerRemoved(address indexed account);
 
   // Define a struct 'retailers' by inheriting from 'Roles' library, struct Role
-Roles.role private retailers;
+  Roles.role private manufacturers;
 
   // In the constructor make the address that deploys this contract the 1st retailer
   constructor() public {
-    _addManufacturer  
+    _addManufacturer
   }
 
   // Define a modifier that checks to see if msg.sender has the appropriate role
   modifier onlyManufacturer() {
-
+    require(isManufacturer(msg.sender));
     _;
   }
 
   // Define a function 'isManufacturer' to check this role
   function isManufacturer(address account) public view returns (bool) {
-
+    return manufacturers.has(account);
   }
 
   // Define a function 'addManufacturer' that adds this role
   function addManufacturer(address account) public onlyManufacturer {
-
+    _addManufacturer(account);
   }
 
   // Define a function 'renounceManufacturer' to renounce this role
   function renounceManufacturer() public {
-
+    _removeManufacturer(account);
   }
 
   // Define an internal function '_addManufacturer' to add this role, called by 'addManufacturer'
   function _addManufacturer(address account) internal {
-
+    manufacturers.add(account);
+    emit ManufacturerAddedd(account);
   }
 
   // Define an internal function '_removeManufacturer' to remove this role, called by 'removeManufacturer'
   function _removeManufacturer(address account) internal {
-
+    manufacturers.remove(account);
+    emit ManufacturerRemoved(account);
   }
 }
