@@ -1,14 +1,14 @@
 // migrating the appropriate contracts
-var FarmerRole = artifacts.require("./FarmerRole.sol");
-var DistributorRole = artifacts.require("./DistributorRole.sol");
-var RetailerRole = artifacts.require("./RetailerRole.sol");
-var ConsumerRole = artifacts.require("./ConsumerRole.sol");
-var SupplyChain = artifacts.require("./SupplyChain.sol");
+const CustomerRole = artifacts.require('./CustomerRole.sol')
+const ManufacturerRole = artifacts.require('./ManufacturerRole.sol')
+const SupplierRole = artifacts.require('./SupplierRole.sol')
+const TransporterRole = artifacts.require('./TransporterRole.sol')
+const SupplyChain = artifacts.require('./SupplyChain.sol')
 
-module.exports = function(deployer) {
-  deployer.deploy(FarmerRole);
-  deployer.deploy(DistributorRole);
-  deployer.deploy(RetailerRole);
-  deployer.deploy(ConsumerRole);
-  deployer.deploy(SupplyChain);
-};
+module.exports = function (deployer) {
+  deployer.deploy(CustomerRole)
+  deployer.deploy(ManufacturerRole)
+  deployer.deploy(SupplierRole)
+  deployer.deploy(TransporterRole)
+  deployer.deploy(SupplyChain)
+}
