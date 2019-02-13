@@ -49,7 +49,7 @@ contract('SupplyChain', function (accounts) {
   })
 
   // 3rd Test
-  it('orderEquipment(): a manufacturer can order an equipment', async () => {
+  it('a manufacturer can order an equipment', async () => {
     const supplyChain = await SupplyChain.deployed()
     // assign manufacturer role
     await supplyChain.addManufacturer(manufacturerID, 'I am a manufacturer')
@@ -81,7 +81,7 @@ contract('SupplyChain', function (accounts) {
   })
 
   // 4th Test
-  it('receiveComponent(): a supplier can receive a component', async () => {
+  it('a supplier can receive a component', async () => {
     const supplyChain = await SupplyChain.deployed()
     // Mark a Component as received by calling function receiveComponent()
     const tx = await supplyChain.receiveComponent(
@@ -89,7 +89,6 @@ contract('SupplyChain', function (accounts) {
       originManufacturerName,
       originPlant,
       equipmentID,
-      componentNotes,
       { from: supplierID })
     // Retrieve saved Component from blockchain with fetchComponent()
     const resultFetch = await supplyChain.fetchComponent.call(upc)
@@ -100,10 +99,9 @@ contract('SupplyChain', function (accounts) {
     assert.equal(resultFetch[2], originManufacturerName, 'Error: Missing or Invalid originManufacturerName')
     assert.equal(resultFetch[3], originPlant, 'Error: Missing or Invalid originPlant')
     assert.equal(resultFetch[4], equipmentID, 'Error: Missing or Invalid equipmentID')
-    assert.equal(resultFetch[5], componentNotes, 'Error: Missing or Invalid componentsNotes')
-    assert.equal(resultFetch[6], 6, 'Error: Missing or Invalid componentState')
-    assert.equal(resultFetch[7], supplierID, 'Error: Missing or Invalid supplierID')
-    assert.equal(resultFetch[8], componentState, 'Error: Missing or Invalid componentState')
+    assert.equal(resultFetch[5], 6, 'Error: Missing or Invalid componentState')
+    assert.equal(resultFetch[6], supplierID, 'Error: Missing or Invalid supplierID')
+    assert.equal(resultFetch[7], componentState, 'Error: Missing or Invalid componentState')
     // check for event emission:
     truffleAssert.eventEmitted(tx, 'Received', ev => {
       return ev.asset === 'Component' && ev.id == upc
@@ -111,27 +109,20 @@ contract('SupplyChain', function (accounts) {
     upc++
   })
 
+
+    // 5th Test
+  it('a supplier can process a component', async() => {
+    const supplyChain = await SupplyChain.deployed()
+    // Mark a component as integrated and an equipment as assembled:
+
+
+    // Retrieve the just now saved item from blockchain by calling function fetchItem()
+
+
+    // Verify the result set
+
+  })
 /*
-    // 3rd Test
-    it('Testing smart contract function packItem() that allows a farmer to pack coffee', async() => {
-        const supplyChain = await SupplyChain.deployed()
-
-        // Declare and Initialize a variable for event
-
-
-        // Watch the emitted event Packed()
-
-
-        // Mark an item as Packed by calling function packItem()
-
-
-        // Retrieve the just now saved item from blockchain by calling function fetchItem()
-
-
-        // Verify the result set
-
-    })
-
     // 4th Test
     it('Testing smart contract function sellItem() that allows a farmer to sell coffee', async() => {
         const supplyChain = await SupplyChain.deployed()

@@ -50,7 +50,6 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner") {
         string originManufacturerName; // Manufacturer Name
         string originPlant;  // city
         uint equipmentID;  // Equipment ID that component will be part of
-        string componentNotes; // Component Notes
         State state;  // Component State as represented in the enum above
         address supplierID;  // Metamask-Ethereum address of the equipment supplier that bought this equipment
         address transporterID;  // address of the Transporter
@@ -77,6 +76,7 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner") {
     // Define 8 events with the same 8 state values
     event Ordered(string asset, uint id); // asset= aircraft, equipment or equipment, id=msn or upc
     event Assembled(string asset, uint id);
+    event Integrated(string asset, uint id);
     event Received(string asset, uint id);
 
     // Define a modifer that checks to see if msg.sender == owner of the contract
@@ -137,39 +137,7 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner") {
         }
     }
 
-    // Define a function 'receive' that allows a supplier to mark an equipment as 'Received'
-    // 1, "Arcelor", "Lyon", 1, "no comments"
-    function receiveComponent(
-        uint _upc,
-        string memory _originManufacturerName,
-        string memory _originPlant,
-        uint _equipmentID,
-        string memory _componentNotes
-    )
-    public
-    onlySupplier
-    ordered(_equipmentID)
-    {
-      // Add the new Component as part of the mapping
-        components[_upc] = Component(
-            _upc,
-            msg.sender,
-            _originManufacturerName,
-            _originPlant,
-            _equipmentID,
-            _componentNotes,
-            State.Received,
-            msg.sender,
-            address(0),
-            address(0),
-            address(0)
-        );
 
-        // Emit the appropriate event
-        emit Received("Component", _upc);
-    }
-
-    // Define a function orderEquipment that allows an AC manufacturer to order an equipment
     function orderEquipment(
         uint _upc,
         address payable _supplierID,
@@ -200,14 +168,43 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner") {
         emit Ordered("Equipment", _upc);
     }
 
-/*
-    // Define a function packEquipment that allows a to order an equipment
-    function packEquipment(uint _upc)
+    function receiveComponent(
+        uint _upc,
+        string memory _originManufacturerName,
+        string memory _originPlant,
+        uint _equipmentID
+    )
     public
+    onlySupplier
+    ordered(_equipmentID)
     {
+        // Add the new Component as part of the mapping
+        components[_upc] = Component(
+            _upc,
+            msg.sender,
+            _originManufacturerName,
+            _originPlant,
+            _equipmentID,
+            State.Received,
+            msg.sender,
+            address(0),
+            address(0),
+            address(0)
+        );
 
+        // Emit the appropriate event
+        emit Received("Component", _upc);
     }
 
+    function processComponent(uint _upc)
+    public
+    {
+        components[_upc].state = State.Integrated;
+        equipments[components[_upc].equipmentID].state = State.Assembled;
+        emit Integrated("Component", _upc);
+        emit Assembled("Equipment", components[_upc].equipmentID);
+    }
+/*
     // Define a function orderEquipment that allows an AC manufacturer to order an equipment
     function shipEquipment(uint _upc)
     public
@@ -239,7 +236,6 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner") {
         string memory originManufacturerName,
         string memory originPlant,
         uint equipmentID,
-        string memory componentNotes,
         State state,
         address supplierID,
         address transporterID,
@@ -254,7 +250,6 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner") {
         originManufacturerName = component.originManufacturerName;
         originPlant = component.originPlant;
         equipmentID = component.equipmentID;
-        componentNotes = component.componentNotes;
         state = component.state;
         supplierID = component.supplierID;
         transporterID = component.transporterID;
