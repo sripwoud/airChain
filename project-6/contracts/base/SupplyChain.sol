@@ -1,18 +1,16 @@
 pragma solidity ^0.5.0;
 import "../accesscontrol/SupplierRole.sol";
+import "../accesscontrol/ManufacturerRole.sol";
 
 
 // Define a contract 'Supplychain'
 // note that by inheriting all these contracts, the deployer of this contract will have all roles!);
-contract SupplyChain is SupplierRole {
+contract SupplyChain is SupplierRole('Owner'), ManufacturerRole('Owner') {
     // Define 'owner'
     address payable owner;
 
     // Define a variable called 'upc' for Universal Product Code (UPC)
     uint  public upc;
-
-    // Define a variable called 'sku' for Stock Keeping Unit (SKU)
-    uint public sku;
 
     // Define a public mappings 'assets' that maps the UPC to an asset.
     mapping (uint => Component) components;
@@ -40,7 +38,6 @@ contract SupplyChain is SupplierRole {
 
     // Define a struct 'Component' with the following fields:
     struct Component {
-        uint sku;  // Stock Keeping Unit (SKU) - unique to the company
         uint upc; // Universal Product Code (UPC) - unique to the product
         address ownerID;  // address of the current owner as the component moves though the supply chain
         string originManufacturerName; // Manufacturer Name
@@ -56,17 +53,17 @@ contract SupplyChain is SupplierRole {
 
     // Define a struct 'Equipment' with the following fields:
     struct Equipment {
-        uint    sku;  // Stock Keeping Unit (SKU) - unique to the company
-        uint    upc; // Universal Product Code (UPC) - unique to the product
+        uint upc; // Universal Product Code (UPC) - unique to the product
         address ownerID;  // address of the current owner as the equipment moves though the supply chain
-        string  originManufacturerName; // Manufacturer Name
-        string  originPlant;  // city
-        uint    msn;  // MSN that equipment will be part of
-        string  equipmentNotes; // Equipment Notes
-        State   equipmentState;  // Equipment State as represented in the enum above
-        address supplierID;  // Metamask-Ethereum address of the equipment supplier that bought this equipment
-        address transporterID;  // Metamask-Ethereum address of the Transporter
-        address manufacturerID; // address of the AC manufacturer that bought the equipment with this equipment
+        string originManufacturerName; // Manufacturer Name
+        string originPlant;  // city
+        uint msn;  // MSN that equipment will be part of
+        uint price;
+        string equipmentNotes; // Equipment Notes
+        State equipmentState;  // Equipment State as represented in the enum above
+        address payable supplierID;  // Metamask-Ethereum address of the equipment supplier that produced this equipment
+        address payable transporterID;  // Metamask-Ethereum address of the Transporter
+        address payable manufacturerID; // address of the AC manufacturer that bought the equipment with this equipment
         address customerID; // address of the Airline that operates the AC with the equipment including this equipment
     }
 
@@ -87,6 +84,20 @@ contract SupplyChain is SupplierRole {
         _;
     }
 
+    // Define a modifier that checks if the paid amount is sufficient to cover the price
+    modifier paidEnough(uint _price) {
+        require(msg.value >= _price);
+        _;
+    }
+
+    // Define a modifier that checks the price and refunds the remaining balance
+    modifier checkValue(uint _upc) {
+        _;
+        uint _price = equipments[_upc].price;
+        uint amountToReturn = msg.value - _price;
+        equipments[_upc].manufacturerID.transfer(amountToReturn);
+    }
+
     // Define a modifier that checks if an item.state of a upc is Received
     modifier received(uint _upc) {
         if (components[_upc].upc != 0) {
@@ -103,7 +114,6 @@ contract SupplyChain is SupplierRole {
     // and set 'upc' to 1
     constructor() public payable {
         owner = msg.sender;
-        sku = 1;
         upc = 1;
     }
 
@@ -126,9 +136,8 @@ contract SupplyChain is SupplierRole {
     public
     onlySupplier
     {
-      // Add the new item as part of the mapping
+      // Add the new Component as part of the mapping
         components[_upc] = Component(
-            sku,
             _upc,
             msg.sender,
             _originManufacturerName,
@@ -141,8 +150,7 @@ contract SupplyChain is SupplierRole {
             address(0),
             address(0)
         );
-        // Increment sku
-        sku = sku + 1;
+
         // Emit the appropriate event
         emit Received("Component", _upc);
     }
@@ -150,10 +158,21 @@ contract SupplyChain is SupplierRole {
     // Define a function orderEquipment that allows an AC manufacturer to order an equipment
     function orderEquipment(uint _upc)
     public
+    payable
+    onlyManufacturer
+    paidEnough(equipments[_upc].price)
+    checkValue(equipments[_upc].price)
     {
-
+        // Add the new Component as part of the mapping
+        // equipment = Equipment(
+        //     0, // equipment doesn't exist yet
+        //     _upc,
+        //     address(0), // equipment doesn't exist yet
+        //
+        // );
     }
 
+/*
     // Define a function orderEquipment that allows an AC manufacturer to order an equipment
     function packEquipment(uint _upc)
     public
@@ -181,13 +200,12 @@ contract SupplyChain is SupplierRole {
     {
 
     }
-
+*/
     // Define functions 'fetchAsset' that fetches the data of a given asset
     function fetchComponent(uint _upc)
     public
     view
     returns (
-        uint componentSKU,
         uint componentUPC,
         address ownerID,
         string memory originManufacturerName,
@@ -203,7 +221,6 @@ contract SupplyChain is SupplierRole {
     {
         // Assign values to the parameters
         Component memory component = components[_upc];
-        componentSKU = component.sku;
         componentUPC = _upc;
         ownerID = component.ownerID;
         originManufacturerName = component.originManufacturerName;

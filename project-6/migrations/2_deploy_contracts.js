@@ -6,9 +6,9 @@ const TransporterRole = artifacts.require('./TransporterRole.sol')
 const SupplyChain = artifacts.require('./SupplyChain.sol')
 
 module.exports = function (deployer) {
-  deployer.deploy(CustomerRole)
-  deployer.deploy(ManufacturerRole)
-  deployer.deploy(SupplierRole)
-  deployer.deploy(TransporterRole)
+  // deployer.deploy(CustomerRole, 'Customer0')
+  // deployer.deploy(ManufacturerRole, 'Manufacturer0')
+  // deployer.deploy(SupplierRole, 'Supplier0')
+  // deployer.deploy(TransporterRole, 'Transporter0')
   deployer.deploy(SupplyChain)
 }
