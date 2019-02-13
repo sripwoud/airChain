@@ -47,7 +47,40 @@ contract('SupplyChain', function (accounts) {
     await supplyChain.renounceSupplier({ from: ownerID })
     assert.equal(await supplyChain.isSupplier(ownerID), false)
   })
+
   // 3rd Test
+  it('orderEquipment(): a manufacturer can order an equipment', async () => {
+    const supplyChain = await SupplyChain.deployed()
+    // assign manufacturer role
+    await supplyChain.addManufacturer(manufacturerID, 'I am a manufacturer')
+    // Mark an equipment as Ordered by calling function orderEquipment()
+    const tx = await supplyChain.orderEquipment(
+      upc,
+      supplierID,
+      msn,
+      { from: manufacturerID })
+
+    // Retrieve saved equipment from blockchain  with fetchEquipment()
+    const resultFetch = await supplyChain.fetchEquipment(upc)
+
+    // Verify the result set
+    assert.equal(resultFetch[0], upc, 'Error: Invalid item UPC')
+    assert.equal(resultFetch[1], emptyAddress, 'Error: owner address should be empty at this stage')
+    assert.equal(resultFetch[2], "", 'Error: originPlant should be empty at this stage')
+    assert.equal(resultFetch[3], msn, 'Error: Missing or Invalid msn')
+    assert.equal(resultFetch[4], 10, 'Error: Missing or Invalid price')
+    assert.equal(resultFetch[5], "", 'Error: Missing or Invalid equipmentNotes')
+    assert.equal(resultFetch[6], 1, 'Error: Missing or Invalid equipmentState')
+    assert.equal(resultFetch[7], supplierID, 'Error: Missing or Invalid supplierID')
+    assert.equal(resultFetch[8], await supplyChain.getNameSupplier(supplierID), 'Error: Missing or Invalid supplier name')
+    // check for event emission:
+    truffleAssert.eventEmitted(tx, 'Ordered', ev => {
+      return ev.asset === 'Equipment' && ev.id == upc
+    })
+    upc++
+  })
+
+  // 4th Test
   it('receiveComponent(): a supplier can receive a component', async () => {
     const supplyChain = await SupplyChain.deployed()
     // Mark a Component as received by calling function receiveComponent()
@@ -78,37 +111,6 @@ contract('SupplyChain', function (accounts) {
     upc++
   })
 
-  // 2nd Test
-  it('orderEquipment(): a manufacturer can order an equipment', async () => {
-    const supplyChain = await SupplyChain.deployed()
-    // assign manufacturer role
-    await supplyChain.addManufacturer(manufacturerID, 'I am a manufacturer')
-    // Mark an equipment as Ordered by calling function orderEquipment()
-    const tx = await supplyChain.orderEquipment(
-      upc,
-      supplierID,
-      msn,
-      { from: manufacturerID })
-
-    // Retrieve saved equipment from blockchain  with fetchEquipment()
-    const resultFetch = await supplyChain.fetchEquipment(upc)
-
-    // Verify the result set
-    assert.equal(resultFetch[0], upc, 'Error: Invalid item UPC')
-    assert.equal(resultFetch[1], emptyAddress, 'Error: owner address should be empty at this stage')
-    assert.equal(resultFetch[2], "", 'Error: originPlant should be empty at this stage')
-    assert.equal(resultFetch[3], msn, 'Error: Missing or Invalid msn')
-    assert.equal(resultFetch[4], 10, 'Error: Missing or Invalid price')
-    assert.equal(resultFetch[5], "", 'Error: Missing or Invalid equipmentNotes')
-    assert.equal(resultFetch[6], 1, 'Error: Missing or Invalid equipmentState')
-    assert.equal(resultFetch[7], supplierID, 'Error: Missing or Invalid supplierID')
-    assert.equal(resultFetch[8], await supplyChain.getNameSupplier(supplierID), 'Error: Missing or Invalid supplier name')
-    // check for event emission:
-    truffleAssert.eventEmitted(tx, 'Ordered', ev => {
-      return ev.asset === 'Equipment' && ev.id == 2
-    })
-    upc++
-  })
 /*
     // 3rd Test
     it('Testing smart contract function packItem() that allows a farmer to pack coffee', async() => {
