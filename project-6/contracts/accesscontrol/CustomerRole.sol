@@ -8,15 +8,15 @@ import "./Roles.sol";
 contract CustomerRole {
     using Roles for Roles.Role;
     // Define 2 events, one for Adding, and other for Removing
-    event CustomerAdded(address indexed account);
-    event CustomerRemoved(address indexed account);
+    event CustomerAdded(address indexed account, string name);
+    event CustomerRemoved(address indexed account, string name);
 
     // Define a struct 'retailers' by inheriting from 'Roles' library, struct Role
     Roles.Role private customers;
 
     // In the constructor make the address that deploys this contract the 1st retailer
-    constructor() public {
-        _addCustomer(msg.sender);
+    constructor(string memory name) public {
+        _addCustomer(msg.sender, name);
     }
 
     // Define a modifier that checks to see if msg.sender has the appropriate role
@@ -31,8 +31,8 @@ contract CustomerRole {
     }
 
     // Define a function 'addCustomer' that adds this role
-    function addCustomer(address account) public onlyCustomer {
-        _addCustomer(account);
+    function addCustomer(address account, string memory name) public onlyCustomer {
+        _addCustomer(account, name);
     }
 
     // Define a function 'renounceCustomer' to renounce this role
@@ -41,14 +41,14 @@ contract CustomerRole {
     }
 
     // Define an internal function '_addCustomer' to add this role, called by 'addCustomer'
-    function _addCustomer(address account) internal {
-        customers.add(account);
-        emit CustomerAdded(account);
+    function _addCustomer(address account, string memory name) internal {
+        customers.add(account, name);
+        emit CustomerAdded(account, name);
     }
 
     // Define an internal function '_removeCustomer' to remove this role, called by 'removeCustomer'
     function _removeCustomer(address account) internal {
         customers.remove(account);
-        emit CustomerRemoved(account);
+        emit CustomerRemoved(account, customers.name[account]);
     }
 }

@@ -9,15 +9,15 @@ contract SupplierRole {
     using Roles for Roles.Role;
 
     // Define 2 events, one for Adding, and other for Removing
-    event SupplierAdded(address indexed account);
-    event SupplierRemoved(address indexed account);
+    event SupplierAdded(address indexed account, string name);
+    event SupplierRemoved(address indexed account, string name);
 
-    // Define a struct 'farmers' by inheriting from 'Roles' library, struct Role
+    // Define a struct 'supliers' by inheriting from 'Roles' library, struct Role
     Roles.Role private suppliers;
 
     // In the constructor make the address that deploys this contract the 1st farmer
-    constructor() public {
-        _addSupplier(msg.sender);
+    constructor(string memory name) public {
+        _addSupplier(msg.sender, name);
     }
 
     // Define a modifier that checks to see if msg.sender has the appropriate role
@@ -32,8 +32,8 @@ contract SupplierRole {
     }
 
     // Define a function 'addSupplier' that adds this role
-    function addSupplier(address account) public onlySupplier {
-        _addSupplier(account);
+    function addSupplier(address account, string memory name) public onlySupplier {
+        _addSupplier(account, name);
     }
 
     // Define a function 'renounceSupplier' to renounce this role
@@ -42,14 +42,14 @@ contract SupplierRole {
     }
 
     // Define an internal function '_addSupplier' to add this role, called by 'addSupplier'
-    function _addSupplier(address account) internal {
-        suppliers.add(account);
-        emit SupplierAdded(account);
+    function _addSupplier(address account, string memory name) internal {
+        suppliers.add(account, name);
+        emit SupplierAdded(account, name);
     }
 
     // Define an internal function '_removeSupplier' to remove this role, called by 'removeSupplier'
     function _removeSupplier(address account) internal {
         suppliers.remove(account);
-        emit SupplierRemoved(account);
+        emit SupplierRemoved(account, suppliers.name[account]);
     }
 }

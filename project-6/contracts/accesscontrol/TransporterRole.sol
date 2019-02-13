@@ -8,15 +8,15 @@ import "./Roles.sol";
 contract TransporterRole {
     using Roles for Roles.Role;
     // Define 2 events, one for Adding, and other for Removing
-    event TransporterAdded(address indexed account);
-    event TransporterRemoved(address indexed account);
+    event TransporterAdded(address indexed account, string name);
+    event TransporterRemoved(address indexed account, string name);
 
     // Define a struct 'retailers' by inheriting from 'Roles' library, struct Role
     Roles.Role private transporters;
 
     // In the constructor make the address that deploys this contract the 1st retailer
-    constructor() public {
-        _addTransporter(msg.sender);
+    constructor(string memory name) public {
+        _addTransporter(msg.sender, name);
     }
 
     // Define a modifier that checks to see if msg.sender has the appropriate role
@@ -31,8 +31,8 @@ contract TransporterRole {
     }
 
     // Define a function 'addTransporter' that adds this role
-    function addTransporter(address account) public onlyTransporter {
-        _addTransporter(account);
+    function addTransporter(address account, string memory name) public onlyTransporter {
+        _addTransporter(account, name);
     }
 
     // Define a function 'renounceTransporter' to renounce this role
@@ -41,14 +41,14 @@ contract TransporterRole {
     }
 
     // Define an internal function '_addTransporter' to add this role, called by 'addTransporter'
-    function _addTransporter(address account) internal {
-        transporters.add(account);
-        emit TransporterAdded(account);
+    function _addTransporter(address account, string memory name) internal {
+        transporters.add(account, name);
+        emit TransporterAdded(account, name);
     }
 
     // Define an internal function '_removeTransporter' to remove this role, called by 'removeTransporter'
     function _removeTransporter(address account) internal {
         transporters.remove(account);
-        emit TransporterRemoved(account);
+        emit TransporterRemoved(account, transporters.name[account]);
     }
 }
