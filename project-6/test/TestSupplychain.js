@@ -11,7 +11,6 @@ contract('SupplyChain', function (accounts) {
   const ownerID = accounts[0]
   const originManufacturerName = 'Bosch'
   const originPlant = 'Aurich'
-  const equipmentID = 1
   const componentNotes = 'Best parts for Galleys'
   var componentState = 0
   const supplierID = accounts[1]
@@ -81,6 +80,9 @@ contract('SupplyChain', function (accounts) {
   })
 
   // 4th Test
+  // equipment upc 1
+  // component upc 2
+  // upc = 2
   it('a supplier can receive a component', async () => {
     const supplyChain = await SupplyChain.deployed()
     // Mark a Component as received by calling function receiveComponent()
@@ -88,7 +90,7 @@ contract('SupplyChain', function (accounts) {
       upc,
       originManufacturerName,
       originPlant,
-      equipmentID,
+      upc - 1,
       { from: supplierID })
     // Retrieve saved Component from blockchain with fetchComponent()
     const resultFetch = await supplyChain.fetchComponent.call(upc)
@@ -98,7 +100,7 @@ contract('SupplyChain', function (accounts) {
     assert.equal(resultFetch[1], supplierID, 'Error: Missing or Invalid ownerID')
     assert.equal(resultFetch[2], originManufacturerName, 'Error: Missing or Invalid originManufacturerName')
     assert.equal(resultFetch[3], originPlant, 'Error: Missing or Invalid originPlant')
-    assert.equal(resultFetch[4], equipmentID, 'Error: Missing or Invalid equipmentID')
+    assert.equal(resultFetch[4], upc - 1, 'Error: Missing or Invalid equipmentID')
     assert.equal(resultFetch[5], 6, 'Error: Missing or Invalid componentState')
     assert.equal(resultFetch[6], supplierID, 'Error: Missing or Invalid supplierID')
     assert.equal(resultFetch[7], componentState, 'Error: Missing or Invalid componentState')
@@ -110,17 +112,25 @@ contract('SupplyChain', function (accounts) {
   })
 
 
-    // 5th Test
-  it('a supplier can process a component', async() => {
+  // 5th Test
+  // equipment: upc 1
+  // component upc 2
+  // upc = 3
+  it('a supplier can process a component', async () => {
     const supplyChain = await SupplyChain.deployed()
     // Mark a component as integrated and an equipment as assembled:
+    const tx = await supplyChain.processComponent(2, { from: supplierID })
+    const equipment = await supplyChain.fetchEquipment(1)
+    const component = await supplyChain.fetchComponent(2)
 
-
-    // Retrieve the just now saved item from blockchain by calling function fetchItem()
-
-
-    // Verify the result set
-
+    assert.equal(equipment[6], 2, "Error: missing or invalid equipment state. Should be 'Assembled'")
+    assert.equal(component[5], 7, "Error: missing or invalid equipment state. Should be 'Integrated'")
+    truffleAssert.eventEmitted(tx, 'Assembled', event => {
+      return event.asset === 'Equipment' && event.id == 1
+    })
+    truffleAssert.eventEmitted(tx, 'Integrated', event => {
+      return event.asset === 'Component' && event.id == 2
+    })
   })
 /*
     // 4th Test
