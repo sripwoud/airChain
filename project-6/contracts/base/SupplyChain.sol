@@ -51,7 +51,7 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner") {
         string originPlant;  // city
         uint equipmentID;  // Equipment ID that component will be part of
         string componentNotes; // Component Notes
-        State componentState;  // Component State as represented in the enum above
+        State state;  // Component State as represented in the enum above
         address supplierID;  // Metamask-Ethereum address of the equipment supplier that bought this equipment
         address transporterID;  // address of the Transporter
         address manufacturerID; // address of the AC manufacturer that bought the equipment with this component
@@ -66,7 +66,7 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner") {
         uint msn;  // MSN that equipment will be part of
         uint price;
         string equipmentNotes; // Equipment Notes
-        State equipmentState;  // Equipment State as represented in the enum above
+        State state;  // Equipment State as represented in the enum above
         address payable supplierID;  // address of user with supplier role that produced this equipment
         string supplierName;
         address payable transporterID;  // address of the Transporter
@@ -105,13 +105,19 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner") {
         _;
     }
 
-    // Define a modifier that checks if an item.state of a upc is Received
+    // Define a modifier that checks if the state of an asset is Ordered
+    modifier ordered(uint _upc) {
+        require(equipments[_upc].state == State.Ordered);
+        _;
+    }
+
+    // Define a modifier that checks if the state of an asset is Received
     modifier received(uint _upc) {
         if (components[_upc].upc != 0) {
-            require(components[_upc].componentState == State.Received);
+            require(components[_upc].state == State.Received);
             _;
         } else {
-            require(equipments[_upc].equipmentState == State.Received);
+            require(equipments[_upc].state == State.Received);
             _;
         }
     }
@@ -142,6 +148,7 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner") {
     )
     public
     onlySupplier
+    ordered(_equipmentID)
     {
       // Add the new Component as part of the mapping
         components[_upc] = Component(
@@ -194,7 +201,7 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner") {
     }
 
 /*
-    // Define a function orderEquipment that allows an AC manufacturer to order an equipment
+    // Define a function packEquipment that allows a to order an equipment
     function packEquipment(uint _upc)
     public
     {
@@ -233,7 +240,7 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner") {
         string memory originPlant,
         uint equipmentID,
         string memory componentNotes,
-        State componentState,
+        State state,
         address supplierID,
         address transporterID,
         address manufacturerID,
@@ -248,7 +255,7 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner") {
         originPlant = component.originPlant;
         equipmentID = component.equipmentID;
         componentNotes = component.componentNotes;
-        componentState = component.componentState;
+        state = component.state;
         supplierID = component.supplierID;
         transporterID = component.transporterID;
         manufacturerID = component.manufacturerID;
@@ -265,7 +272,7 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner") {
         uint msn,
         uint price,
         string memory equipmentNotes,
-        State equipmentState,
+        State state,
         address supplierID,
         string memory supplierName,
         address transporterID,
@@ -281,7 +288,7 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner") {
         msn = equipment.msn;
         price = equipment.price;
         equipmentNotes = equipment.equipmentNotes;
-        equipmentState = equipment.equipmentState;
+        state = equipment.state;
         supplierID = equipment.supplierID;
         supplierName = equipment.supplierName;
         transporterID = equipment.transporterID;
