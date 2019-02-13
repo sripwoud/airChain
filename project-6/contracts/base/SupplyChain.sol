@@ -198,6 +198,8 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner") {
 
     function processComponent(uint _upc)
     public
+    onlySupplier
+    received(_upc)
     {
         components[_upc].state = State.Integrated;
         equipments[components[_upc].equipmentID].state = State.Assembled;
