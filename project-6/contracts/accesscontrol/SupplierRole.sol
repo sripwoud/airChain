@@ -26,6 +26,10 @@ contract SupplierRole {
         _;
     }
 
+    function getNameSupplier(address account) public view returns (string memory) {
+        return suppliers.getName(account);
+    }
+
     // Define a function 'isSupplier' to check this role
     function isSupplier(address account) public view returns (bool) {
         return suppliers.has(account);
