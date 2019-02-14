@@ -88,6 +88,7 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
     event Assembled(string asset, uint id);
     event Integrated(string asset, uint id);
     event Received(string asset, uint id);
+    event StructureReady(uint msn);
 
     // Define a modifer that checks to see if msg.sender == owner of the contract
     modifier onlyOwner() {
@@ -253,6 +254,23 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
 
         emit Integrated("Component", _upc);
         emit Assembled("Equipment", components[_upc].equipmentID);
+    }
+
+    function prepareStructure(
+        uint _msn,
+        string memory _originPlant,
+        string memory _aircraftNotes
+    )
+    public
+    onlyManufacturer
+    ordered(_msn)
+    {
+        aircrafts[_msn].state = State.StructureReady;
+        aircrafts[_msn].ownerID = msg.sender;
+        aircrafts[_msn].originPlant = _originPlant;
+        aircrafts[_msn].aircraftNotes = _aircraftNotes;
+
+        emit StructureReady(_msn);
     }
 /*
     // Define a function orderEquipment that allows an AC manufacturer to order an equipment
