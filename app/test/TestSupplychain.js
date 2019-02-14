@@ -14,6 +14,8 @@ contract('SupplyChain', function (accounts) {
   const originManufacturerName = 'Bosch'
   const originPlantComponent = 'Aurich'
   const originPlantEquipment = 'Augsburg'
+  const originPlantAircraft = 'Hamburg'
+  const aircraftNotes = 'A321 NEO ST2 Cabin full economy'
   const equipmentNotes = 'Best Galley'
   const supplierID = accounts[1]
   const transporterID = accounts[2]
@@ -216,24 +218,29 @@ contract('SupplyChain', function (accounts) {
       return event.asset === 'Component' && event.id == componentUPC
     })
   })
-/*
+
   it('a manufacturer can prepare the structure of an aircraft', async () => {
     const supplyChain = await SupplyChain.deployed()
 
-    // Declare and Initialize a variable for event
+    // Manufacturer marks AC as structureReady
+    const tx = await supplyChain.prepareStructure(
+      1,
+      originPlantAircraft,
+      aircraftNotes,
+      { from: manufacturerID })
 
+    // Fetch AC
+    const aircraft = await supplyChain.fetchAircraft(1)
 
-    // Watch the emitted event ForSale()
+    // Checks
+    assert.equal(aircraft[3], 8, 'Error: aircraft state should be "StructureReady" at this stage')
+    assert.equal(aircraft[4], manufacturerID, 'Error:missing or invalid manufacturerID')
+    assert.equal(aircraft[6], originPlantAircraft, 'Error:missing or invalid originPlantAircraft')
+    assert.equal(aircraft[7], aircraftNotes, 'Error:missing or invalid aircraftNotes')
 
-
-    // Mark an item as ForSale by calling function sellItem()
-
-
-    // Retrieve the just now saved item from blockchain by calling function fetchItem()
-
-
-    // Verify the result set
-
+    truffleAssert.eventEmitted(tx, 'StructureReady', event => {
+      return event.msn == 1
+    })
   })
 /*
     it('Testing smart contract function buyItem() that allows a distributor to buy coffee', async() => {
