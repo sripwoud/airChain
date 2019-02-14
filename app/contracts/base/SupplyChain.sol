@@ -38,13 +38,20 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
         Ordered,       // 1
         Assembled,     // 2
         Packed,        // 3
-        Shipped,       // 4
-        Transported,   // 5
-        Received,      // 6
-        Integrated,    // 7
-        StructureReady // 8
+        InTransit,     // 4
+        Received,      // 5
+        Integrated,    // 6
+        StructureReady // 7
     }
-    /* State constant defaultState = State.ToBeOrdered; */
+
+    // Define 8 events with the same 8 state values
+    event Ordered(string asset, uint id); // asset= aircraft, equipment or equipment, id=msn or id
+    event Assembled(string asset, uint id);
+    event Packed(uint id);
+    event InTransit(uint id);
+    event Received(string asset, uint id);
+    event Integrated(string asset, uint id);
+    event StructureReady(uint msn);
 
     // Define strut for each asset: Component, Equipment, Aircraft
     struct Component {
@@ -83,13 +90,6 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
         address customerID; // airline that bought this aircraft
     }
 
-    // Define 8 events with the same 8 state values
-    event Ordered(string asset, uint id); // asset= aircraft, equipment or equipment, id=msn or id
-    event Assembled(string asset, uint id);
-    event Integrated(string asset, uint id);
-    event Received(string asset, uint id);
-    event StructureReady(uint msn);
-    event Packed(uint id);
 
     // Define a modifer that checks to see if msg.sender == owner of the contract
     modifier onlyOwner() {
