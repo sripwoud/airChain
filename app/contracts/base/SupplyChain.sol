@@ -90,20 +90,16 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
         address customerID; // airline that bought this aircraft
     }
 
-
-    // Define a modifer that checks to see if msg.sender == owner of the contract
     modifier onlyOwner() {
         require(msg.sender == owner);
         _;
     }
 
-    // Define a modifer that verifies the Caller
     modifier verifyCaller (address _address) {
         require(msg.sender == _address);
         _;
     }
 
-    // Define a modifier that checks if the paid amount is sufficient to cover the price
     modifier paidEnough(uint _price) {
         require(msg.value >= _price, "Value sent does not cover the price!");
         _;
@@ -117,22 +113,23 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
         _;
     }
 
-    // Define a modifier that checks if the state of an asset is Ordered
-    // "_id" can be an "equipmentID" or an MSN
     modifier ordered(uint _idOrMsn) {
         require(equipments[_idOrMsn].state == State.Ordered || aircrafts[_idOrMsn].state == State.Ordered);
         _;
     }
 
-    // Define a modifier that checks if the state of an asset is Received
     modifier received(uint _id) {
         require(components[_id].state == State.Received || equipments[_id].state == State.Received);
         _;
     }
 
-    // Define a modifier that checks if the state of an asset is assembled
     modifier assembled(uint _id) {
         require(equipments[_id].state == State.Assembled);
+        _;
+    }
+
+    modifier packed(uint _id) {
+        require(equipments[_id].state == State.Packed);
         _;
     }
 
@@ -276,21 +273,19 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
 
         emit Packed(_equipmentID);
     }
-/*
-    // Define a function orderEquipment that allows an AC manufacturer to order an equipment
-    function transportEquipment(uint _id)
-    public
-    {
 
+    function transportEquipment(uint _equipmentID)
+    public
+    onlyTransporter
+    verifyCaller(equipments[_equipmentID].transporterID)
+    packed(_equipmentID)
+    {
+        equipments[_equipmentID].state = State.InTransit;
+        equipments[_equipmentID].ownerID = msg.sender;
+        emit InTransit(_equipmentID);
     }
 
-    // Define a function orderEquipment that allows an AC manufacturer to order an equipment
-    function receiveEquipment(uint _id)
-    public
-    {
-
-    }
-*/
+    // function receiveAircraft()
 
     // Define functions 'fetchAsset' that fetches the data of a given asset
     function fetchComponent(uint _id)
