@@ -159,38 +159,34 @@ contract('SupplyChain', function (accounts) {
       return ev.asset === 'Equipment' && ev.id == equipmentUPC
     })
   })
-/*
-  // equipment upc 1
-  // component upc 2
-  // upc = 2
+
   it('a supplier can receive a component', async () => {
     const supplyChain = await SupplyChain.deployed()
-    // Mark a Component as received by calling function receiveComponent()
+
+    // Supplier marks component as received
     const tx = await supplyChain.receiveComponent(
-      upc,
+      componentUPC,
       originManufacturerName,
       originPlant,
-      upc - 1,
+      equipmentUPC,
       { from: supplierID })
     // Retrieve saved Component from blockchain with fetchComponent()
-    const resultFetch = await supplyChain.fetchComponent.call(upc)
+    const component = await supplyChain.fetchComponent.call(componentUPC)
 
-    // Verify the result set
-    assert.equal(resultFetch[0], upc, 'Error: Invalid item UPC')
-    assert.equal(resultFetch[1], supplierID, 'Error: Missing or Invalid ownerID')
-    assert.equal(resultFetch[2], originManufacturerName, 'Error: Missing or Invalid originManufacturerName')
-    assert.equal(resultFetch[3], originPlant, 'Error: Missing or Invalid originPlant')
-    assert.equal(resultFetch[4], upc - 1, 'Error: Missing or Invalid equipmentID')
-    assert.equal(resultFetch[5], 6, 'Error: Missing or Invalid componentState')
-    assert.equal(resultFetch[6], supplierID, 'Error: Missing or Invalid supplierID')
-    assert.equal(resultFetch[7], componentState, 'Error: Missing or Invalid componentState')
-    // check for event emission:
+    // Checks
+    assert.equal(component[0], componentUPC, 'Error: missing or invalid component UPC')
+    assert.equal(component[1], equipmentUPC, 'Error: missing or Invalid equipment UPC')
+    assert.equal(component[2], 6, 'Error: state should be "ordered" (6) at this stage')
+    assert.equal(component[3], originManufacturerName, 'Error: Missing or Invalid originManufacturerName')
+    assert.equal(component[4], originPlant, 'Error: Missing or Invalid originPlant')
+    assert.equal(component[5], supplierID, 'Error: Missing or Invalid supplierID')
+
+    // check event:
     truffleAssert.eventEmitted(tx, 'Received', ev => {
-      return ev.asset === 'Component' && ev.id == upc
+      return ev.asset === 'Component' && ev.id == componentUPC
     })
-    upc++
   })
-
+/*
   // equipment: upc 1
   // component upc 2
   // upc = 3
