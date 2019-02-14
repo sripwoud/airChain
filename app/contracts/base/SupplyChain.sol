@@ -133,6 +133,11 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
         _;
     }
 
+    modifier inTransit(uint _id) {
+        require(equipments[_id].state == State.InTransit);
+        _;
+    }
+
     // In the constructor set 'owner' to the address that instantiated the contract
     // and set 'msn' to 1
     constructor() public payable {
@@ -233,6 +238,8 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
     public
     onlySupplier
     received(_componentID)
+    // verify that caller is the same as the supplier contracted by the manufacturer who ordered the equipment
+    verifyCaller(equipments[components[_componentID].equipmentID].supplierID)
     {
         components[_componentID].state = State.Integrated;
 
@@ -267,6 +274,8 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
     public
     onlySupplier
     assembled(_equipmentID)
+    // verify that caller is the supplier that was contracted by manufacturer that ordered the equipment
+    verifyCaller(equipments[_equipmentID].supplierID)
     {
         equipments[_equipmentID].state = State.Packed;
         equipments[_equipmentID].transporterID = _transporterID;
@@ -277,6 +286,7 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
     function transportEquipment(uint _equipmentID)
     public
     onlyTransporter
+    // verify that caller is the transporter that was contracted by the supplier
     verifyCaller(equipments[_equipmentID].transporterID)
     packed(_equipmentID)
     {
@@ -285,7 +295,17 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
         emit InTransit(_equipmentID);
     }
 
-    // function receiveAircraft()
+    function receiveEquipment(uint _equipmentID)
+    public
+    onlyManufacturer
+    inTransit(_equipmentID)
+    // verify that caller is the manufactuer that ordered the equipment in the first place
+    verifyCaller(equipments[_equipmentID].manufacturerID)
+    // payEnough()
+    // checkValue()
+    {
+
+    }
 
     // Define functions 'fetchAsset' that fetches the data of a given asset
     function fetchComponent(uint _id)
