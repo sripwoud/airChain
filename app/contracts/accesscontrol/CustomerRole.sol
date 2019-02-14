@@ -25,6 +25,10 @@ contract CustomerRole {
         _;
     }
 
+    function getNameCustomer(address account) public view returns (string memory) {
+        return customers.getName(account);
+    }
+    
     // Define a function 'isCustomer' to check this role
     function isCustomer(address account) public view returns (bool) {
         return customers.has(account);
