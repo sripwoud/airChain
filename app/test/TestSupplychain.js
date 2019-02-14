@@ -296,82 +296,28 @@ contract('SupplyChain', function (accounts) {
       return event.id == equipmentUPC
     })
   })
-/*
-    it('Testing smart contract function shipItem() that allows a distributor to ship coffee', async() => {
-        const supplyChain = await SupplyChain.deployed()
 
-        // Declare and Initialize a variable for event
+  it('a manufacturer can process an equipment', async () => {
+    const supplyChain = await SupplyChain.deployed()
 
+    // Manufactuer marks equipment as Integrated and aircraft as Assembled
+    const tx = await supplyChain.processEquipment(equipmentUPC, 'No further notes', { from: manufacturerID })
 
-        // Watch the emitted event Shipped()
+    // Fetch assets
+    const equipment = await supplyChain.fetchEquipment(equipmentUPC)
+    const aircraft = await supplyChain.fetchAircraft(equipment[2])
 
+    // Checks
+    assert.equal(equipment[4], 6, 'Error: equipment state should be "Integrated" (6) at this stage')
 
-        // Mark an item as Sold by calling function buyItem()
+    assert.equal(aircraft[3], 2, 'Error: aircraft state should be "Assembled" (2) at this stage')
+    assert.equal(aircraft[7], aircraftNotes + ', Assembly stage: ' + 'No further notes', 'Error: invalid aircraftNotes')
 
-
-        // Retrieve the just now saved item from blockchain by calling function fetchItem()
-
-
-        // Verify the result set
-
+    truffleAssert.eventEmitted(tx, 'Integrated', event => {
+      return event.asset === 'Equipment' && event.id == equipmentUPC
     })
-/*
-    it('Testing smart contract function receiveItem() that allows a retailer to mark coffee received', async() => {
-        const supplyChain = await SupplyChain.deployed()
-
-        // Declare and Initialize a variable for event
-
-
-        // Watch the emitted event Received()
-
-
-        // Mark an item as Sold by calling function buyItem()
-
-
-        // Retrieve the just now saved item from blockchain by calling function fetchItem()
-
-
-        // Verify the result set
-
+    truffleAssert.eventEmitted(tx, 'Assembled', event => {
+      return event.asset === 'Aircraft' && event.id == 1
     })
-/*
-    it('Testing smart contract function purchaseItem() that allows a consumer to purchase coffee', async() => {
-        const supplyChain = await SupplyChain.deployed()
-
-        // Declare and Initialize a variable for event
-
-
-        // Watch the emitted event Purchased()
-
-
-        // Mark an item as Sold by calling function buyItem()
-
-
-        // Retrieve the just now saved item from blockchain by calling function fetchItem()
-
-
-        // Verify the result set
-
-    })
-/*
-    it('Testing smart contract function fetchItemBufferOne() that allows anyone to fetch item details from blockchain', async() => {
-        const supplyChain = await SupplyChain.deployed()
-
-        // Retrieve the just now saved item from blockchain by calling function fetchItem()
-
-
-        // Verify the result set:
-
-    })
-/*
-    it('Testing smart contract function fetchItemBufferTwo() that allows anyone to fetch item details from blockchain', async() => {
-        const supplyChain = await SupplyChain.deployed()
-
-        // Retrieve the just now saved item from blockchain by calling function fetchItem()
-
-
-        // Verify the result set:
-
-    })
-*/
+  })
 })

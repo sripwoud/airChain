@@ -138,6 +138,11 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
         _;
     }
 
+    modifier structureReady(uint _id) {
+        require(aircrafts[_id].state == State.StructureReady);
+        _;
+    }
+
     // In the constructor set 'owner' to the address that instantiated the contract
     // and set 'msn' to 1
     constructor() public payable {
@@ -308,6 +313,30 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
         equipments[_equipmentID].ownerID = msg.sender;
 
         emit Received("Equipment", _equipmentID);
+    }
+
+    function processEquipment(uint _equipmentID, string memory _aircraftNotes)
+    public
+    onlyManufacturer
+    received(_equipmentID)
+    structureReady(equipments[_equipmentID].msn)
+    // verify that caller is the same as the manufacturer who ordered the equipment in the first place
+    verifyCaller(equipments[_equipmentID].manufacturerID)
+    // verify that caller is the same as the manufacturer contracted by the customer who ordered the aircraft
+    verifyCaller(aircrafts[equipments[_equipmentID].msn].manufacturerID)
+    {
+        equipments[_equipmentID].state = State.Integrated;
+
+        aircrafts[equipments[_equipmentID].msn].state = State.Assembled;
+        // possiblity to update notes at this stage:
+        aircrafts[equipments[_equipmentID].msn].aircraftNotes = string(abi.encodePacked(
+            aircrafts[equipments[_equipmentID].msn].aircraftNotes,
+            ", Assembly stage: ",
+            _aircraftNotes
+        ));
+
+        emit Integrated("Equipment", _equipmentID);
+        emit Assembled("Aircraft", equipments[_equipmentID].msn);
     }
 
     // Define functions 'fetchAsset' that fetches the data of a given asset
