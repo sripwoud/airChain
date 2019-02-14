@@ -25,6 +25,10 @@ contract TransporterRole {
         _;
     }
 
+    function getNameTransporter(address account) public view returns (string memory) {
+        return transporters.getName(account);
+    }
+
     // Define a function 'isTransporter' to check this role
     function isTransporter(address account) public view returns (bool) {
         return transporters.has(account);

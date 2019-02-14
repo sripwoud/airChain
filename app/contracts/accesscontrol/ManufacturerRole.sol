@@ -25,6 +25,10 @@ contract ManufacturerRole {
         _;
     }
 
+    function getNameManufacturer(address account) public view returns (string memory) {
+        return manufacturers.getName(account);
+    }
+
     // Define a function 'isManufacturer' to check this role
     function isManufacturer(address account) public view returns (bool) {
         return manufacturers.has(account);
