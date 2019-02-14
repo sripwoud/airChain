@@ -25,9 +25,25 @@ contract('SupplyChain', function (accounts) {
   console.log('Transporter: accounts[2] ', accounts[2])
   console.log('Manufacturer: accounts[3] ', accounts[3])
   console.log('Customer: accounts[4] ', accounts[4])
-  // const supplyChain = SupplyChain.deployed()
-  // supplyChain.then(result => console.log(result.contract.events))
-  // 1st test
+
+  it('can add a Manufacturer Role to an address', async () => {
+    const supplyChain = await SupplyChain.deployed()
+    assert.equal(await supplyChain.isManufacturer(manufacturerID), false)
+    const tx = await supplyChain.addManufacturer(manufacturerID, 'I am a manufacturer')
+    assert.equal(await supplyChain.isManufacturer(manufacturerID), true)
+    assert.equal(await supplyChain.getNameManufacturer(manufacturerID), 'I am a manufacturer')
+    truffleAssert.eventEmitted(tx, 'ManufacturerAdded', ev => {
+      return ev.account === manufacturerID && ev.name === 'I am a manufacturer'
+    })
+  })
+
+  it('can renounce a Manufacturer role', async () => {
+    const supplyChain = await SupplyChain.deployed()
+    assert.equal(await supplyChain.isManufacturer(ownerID), true)
+    await supplyChain.renounceManufacturer({ from: ownerID })
+    assert.equal(await supplyChain.isManufacturer(ownerID), false)
+  })
+
   it('can add a Supplier Role to an address', async () => {
     const supplyChain = await SupplyChain.deployed()
     assert.equal(await supplyChain.isSupplier(supplierID), false)
@@ -39,7 +55,6 @@ contract('SupplyChain', function (accounts) {
     })
   })
 
-  // 2nd Test
   it('can renounce a Supplier role', async () => {
     const supplyChain = await SupplyChain.deployed()
     assert.equal(await supplyChain.isSupplier(ownerID), true)
@@ -47,7 +62,42 @@ contract('SupplyChain', function (accounts) {
     assert.equal(await supplyChain.isSupplier(ownerID), false)
   })
 
-  // 3rd Test
+  it('can add a Customer Role to an address', async () => {
+    const supplyChain = await SupplyChain.deployed()
+    assert.equal(await supplyChain.isCustomer(customerID), false)
+    const tx = await supplyChain.addCustomer(customerID, 'I am a customer')
+    assert.equal(await supplyChain.isCustomer(customerID), true)
+    assert.equal(await supplyChain.getNameCustomer(customerID), 'I am a customer')
+    truffleAssert.eventEmitted(tx, 'CustomerAdded', ev => {
+      return ev.account === customerID && ev.name === 'I am a customer'
+    })
+  })
+
+  it('can renounce a Customer role', async () => {
+    const supplyChain = await SupplyChain.deployed()
+    assert.equal(await supplyChain.isCustomer(ownerID), true)
+    await supplyChain.renounceCustomer({ from: ownerID })
+    assert.equal(await supplyChain.isCustomer(ownerID), false)
+  })
+
+  it('can add a Transporter Role to an address', async () => {
+    const supplyChain = await SupplyChain.deployed()
+    assert.equal(await supplyChain.isTransporter(transporterID), false)
+    const tx = await supplyChain.addTransporter(transporterID, 'I am a transporter')
+    assert.equal(await supplyChain.isTransporter(transporterID), true)
+    assert.equal(await supplyChain.getNameTransporter(transporterID), 'I am a transporter')
+    truffleAssert.eventEmitted(tx, 'TransporterAdded', ev => {
+      return ev.account === transporterID && ev.name === 'I am a transporter'
+    })
+  })
+
+  it('can renounce a Transporter role', async () => {
+    const supplyChain = await SupplyChain.deployed()
+    assert.equal(await supplyChain.isTransporter(ownerID), true)
+    await supplyChain.renounceTransporter({ from: ownerID })
+    assert.equal(await supplyChain.isTransporter(ownerID), false)
+  })
+/*
   it('a manufacturer can order an equipment', async () => {
     const supplyChain = await SupplyChain.deployed()
     // assign manufacturer role
@@ -79,7 +129,6 @@ contract('SupplyChain', function (accounts) {
     upc++
   })
 
-  // 4th Test
   // equipment upc 1
   // component upc 2
   // upc = 2
@@ -111,8 +160,6 @@ contract('SupplyChain', function (accounts) {
     upc++
   })
 
-
-  // 5th Test
   // equipment: upc 1
   // component upc 2
   // upc = 3
@@ -132,28 +179,26 @@ contract('SupplyChain', function (accounts) {
       return event.asset === 'Component' && event.id == 2
     })
   })
+
+  it('a manufacturer can prepare the structure of an aircraft', async () => {
+    const supplyChain = await SupplyChain.deployed()
+
+    // Declare and Initialize a variable for event
+
+
+    // Watch the emitted event ForSale()
+
+
+    // Mark an item as ForSale by calling function sellItem()
+
+
+    // Retrieve the just now saved item from blockchain by calling function fetchItem()
+
+
+    // Verify the result set
+
+  })
 /*
-    // 4th Test
-    it('Testing smart contract function sellItem() that allows a farmer to sell coffee', async() => {
-        const supplyChain = await SupplyChain.deployed()
-
-        // Declare and Initialize a variable for event
-
-
-        // Watch the emitted event ForSale()
-
-
-        // Mark an item as ForSale by calling function sellItem()
-
-
-        // Retrieve the just now saved item from blockchain by calling function fetchItem()
-
-
-        // Verify the result set
-
-    })
-
-    // 5th Test
     it('Testing smart contract function buyItem() that allows a distributor to buy coffee', async() => {
         const supplyChain = await SupplyChain.deployed()
 
@@ -173,8 +218,7 @@ contract('SupplyChain', function (accounts) {
         // Verify the result set
 
     })
-
-    // 6th Test
+/*
     it('Testing smart contract function shipItem() that allows a distributor to ship coffee', async() => {
         const supplyChain = await SupplyChain.deployed()
 
@@ -193,8 +237,7 @@ contract('SupplyChain', function (accounts) {
         // Verify the result set
 
     })
-
-    // 7th Test
+/*
     it('Testing smart contract function receiveItem() that allows a retailer to mark coffee received', async() => {
         const supplyChain = await SupplyChain.deployed()
 
@@ -213,8 +256,7 @@ contract('SupplyChain', function (accounts) {
         // Verify the result set
 
     })
-
-    // 8th Test
+/*
     it('Testing smart contract function purchaseItem() that allows a consumer to purchase coffee', async() => {
         const supplyChain = await SupplyChain.deployed()
 
@@ -233,8 +275,7 @@ contract('SupplyChain', function (accounts) {
         // Verify the result set
 
     })
-
-    // 9th Test
+/*
     it('Testing smart contract function fetchItemBufferOne() that allows anyone to fetch item details from blockchain', async() => {
         const supplyChain = await SupplyChain.deployed()
 
@@ -244,8 +285,7 @@ contract('SupplyChain', function (accounts) {
         // Verify the result set:
 
     })
-
-    // 10th Test
+/*
     it('Testing smart contract function fetchItemBufferTwo() that allows anyone to fetch item details from blockchain', async() => {
         const supplyChain = await SupplyChain.deployed()
 

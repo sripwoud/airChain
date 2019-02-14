@@ -40,8 +40,8 @@ contract ManufacturerRole {
     }
 
     // Define a function 'renounceManufacturer' to renounce this role
-    function renounceManufacturer(address account) public {
-        _removeManufacturer(account);
+    function renounceManufacturer() public {
+        _removeManufacturer(msg.sender);
     }
 
     // Define an internal function '_addManufacturer' to add this role, called by 'addManufacturer'

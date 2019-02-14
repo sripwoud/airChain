@@ -40,8 +40,8 @@ contract TransporterRole {
     }
 
     // Define a function 'renounceTransporter' to renounce this role
-    function renounceTransporter(address account) public {
-        _removeTransporter(account);
+    function renounceTransporter() public {
+        _removeTransporter(msg.sender);
     }
 
     // Define an internal function '_addTransporter' to add this role, called by 'addTransporter'
