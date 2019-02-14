@@ -48,7 +48,7 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
 
     // Define strut for each asset: Component, Equipment, Aircraft
     struct Component {
-        uint upc; // Universal Product Code (UPC) - unique to the product
+        uint id; // Universal Product Code (UPC) - unique to the product
         uint equipmentID;  // Equipment ID that component will be part of
         State state;  // Component State as represented in the enum above
         string originManufacturerName; // Manufacturer Name
@@ -58,7 +58,7 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
 
     // Define a struct 'Equipment' with the following fields:
     struct Equipment {
-        uint upc; // Universal Product Code (UPC) - unique to the product
+        uint id; // Universal Product Code (UPC) - unique to the product
         uint componentID; // component integrated into this equipment
         uint msn;  // MSN that equipment will be part of
         uint price;
@@ -73,7 +73,7 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
 
     struct Aircraft {
         uint msn;
-        uint equipmentID; // upc of the equipment integrated into this AC
+        uint equipmentID; // id of the equipment integrated into this AC
         uint price;
         State state;
         address ownerID;
@@ -84,11 +84,12 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
     }
 
     // Define 8 events with the same 8 state values
-    event Ordered(string asset, uint id); // asset= aircraft, equipment or equipment, id=msn or upc
+    event Ordered(string asset, uint id); // asset= aircraft, equipment or equipment, id=msn or id
     event Assembled(string asset, uint id);
     event Integrated(string asset, uint id);
     event Received(string asset, uint id);
     event StructureReady(uint msn);
+    event Packed(uint id);
 
     // Define a modifer that checks to see if msg.sender == owner of the contract
     modifier onlyOwner() {
@@ -109,34 +110,34 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
     }
 
     // Define a modifier that checks the price and refunds the remaining balance
-    modifier checkValue(uint _upc) {
-        uint _price = equipments[_upc].price;
+    modifier checkValue(uint _id) {
+        uint _price = equipments[_id].price;
         uint amountToReturn = msg.value - _price;
-        equipments[_upc].manufacturerID.transfer(amountToReturn);
+        equipments[_id].manufacturerID.transfer(amountToReturn);
         _;
     }
 
     // Define a modifier that checks if the state of an asset is Ordered
-    // "_upc" can be an "equipment UPC" or an MSN
-    modifier ordered(uint _upcOrMsn) {
-        require(equipments[_upcOrMsn].state == State.Ordered || aircrafts[_upcOrMsn].state == State.Ordered);
+    // "_id" can be an "equipmentID" or an MSN
+    modifier ordered(uint _idOrMsn) {
+        require(equipments[_idOrMsn].state == State.Ordered || aircrafts[_idOrMsn].state == State.Ordered);
         _;
     }
 
     // Define a modifier that checks if the state of an asset is Received
-    modifier received(uint _upc) {
-        if (components[_upc].upc != 0) {
-            require(components[_upc].state == State.Received);
-            _;
-        } else {
-            require(equipments[_upc].state == State.Received);
-            _;
-        }
+    modifier received(uint _id) {
+        require(components[_id].state == State.Received || equipments[_id].state == State.Received);
+        _;
+    }
+
+    // Define a modifier that checks if the state of an asset is assembled
+    modifier assembled(uint _id) {
+        require(equipments[_id].state == State.Assembled);
+        _;
     }
 
     // In the constructor set 'owner' to the address that instantiated the contract
-    // and set 'sku' to 1
-    // and set 'upc' to 1
+    // and set 'msn' to 1
     constructor() public payable {
         owner = msg.sender;
         msn = 1;
@@ -174,7 +175,7 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
     }
 
     function orderEquipment(
-        uint _upcEquipment,
+        uint _equipmentID,
         address payable _supplierID,
         uint _msn
     )
@@ -183,12 +184,12 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
     onlyManufacturer
     ordered(_msn)
     // TO DO: implement payments with withdraw pattern!!
-    // paidEnough(equipments[_upc].price)
-    // checkValue(equipments[_upc].price)
+    // paidEnough(equipments[_id].price)
+    // checkValue(equipments[_id].price)
     {
         // Add the new Component as part of the mapping
-        equipments[_upcEquipment] = Equipment(
-            _upcEquipment,
+        equipments[_equipmentID] = Equipment(
+            _equipmentID,
             0, // the supplier will decide which component he'll use to produce this equipment
             _msn,
             equipmentPrice,
@@ -200,19 +201,11 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
             address(0), // transportID filled by supplier at shipment stage
             msg.sender
         );
-        emit Ordered("Equipment", _upcEquipment);
+        emit Ordered("Equipment", _equipmentID);
     }
 
-    // function prepareStructure(uint _msn)
-    // public
-    // onlyManufacturer
-    // ordered(_msn)
-    // {
-    //
-    // }
-
     function receiveComponent(
-        uint _upc,
+        uint _componentID,
         string memory _originManufacturerName,
         string memory _originPlant,
         uint _equipmentID
@@ -222,8 +215,8 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
     ordered(_equipmentID)
     {
         // Add the new Component as part of the mapping
-        components[_upc] = Component(
-            _upc,
+        components[_componentID] = Component(
+            _componentID,
             _equipmentID,
             State.Received,
             _originManufacturerName,
@@ -232,28 +225,28 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
         );
 
         // Emit the appropriate event
-        emit Received("Component", _upc);
+        emit Received("Component", _componentID);
     }
 
     function processComponent(
-        uint _upc,
+        uint _componentID,
         string memory _originPlant,
         string memory _equipmentNotes
     )
     public
     onlySupplier
-    received(_upc)
+    received(_componentID)
     {
-        components[_upc].state = State.Integrated;
+        components[_componentID].state = State.Integrated;
 
-        equipments[components[_upc].equipmentID].componentID = _upc;
-        equipments[components[_upc].equipmentID].state = State.Assembled;
-        equipments[components[_upc].equipmentID].ownerID = msg.sender;
-        equipments[components[_upc].equipmentID].originPlant = _originPlant;
-        equipments[components[_upc].equipmentID].equipmentNotes = _equipmentNotes;
+        equipments[components[_componentID].equipmentID].componentID = _componentID;
+        equipments[components[_componentID].equipmentID].state = State.Assembled;
+        equipments[components[_componentID].equipmentID].ownerID = msg.sender;
+        equipments[components[_componentID].equipmentID].originPlant = _originPlant;
+        equipments[components[_componentID].equipmentID].equipmentNotes = _equipmentNotes;
 
-        emit Integrated("Component", _upc);
-        emit Assembled("Equipment", components[_upc].equipmentID);
+        emit Integrated("Component", _componentID);
+        emit Assembled("Equipment", components[_componentID].equipmentID);
     }
 
     function prepareStructure(
@@ -272,23 +265,27 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
 
         emit StructureReady(_msn);
     }
+
+    function packEquipment(uint _equipmentID, address payable _transporterID)
+    public
+    onlySupplier
+    assembled(_equipmentID)
+    {
+        equipments[_equipmentID].state = State.Packed;
+        equipments[_equipmentID].transporterID = _transporterID;
+
+        emit Packed(_equipmentID);
+    }
 /*
     // Define a function orderEquipment that allows an AC manufacturer to order an equipment
-    function shipEquipment(uint _upc)
+    function transportEquipment(uint _id)
     public
     {
 
     }
 
     // Define a function orderEquipment that allows an AC manufacturer to order an equipment
-    function transportEquipment(uint _upc)
-    public
-    {
-
-    }
-
-    // Define a function orderEquipment that allows an AC manufacturer to order an equipment
-    function receiveEquipment(uint _upc)
+    function receiveEquipment(uint _id)
     public
     {
 
@@ -296,7 +293,7 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
 */
 
     // Define functions 'fetchAsset' that fetches the data of a given asset
-    function fetchComponent(uint _upc)
+    function fetchComponent(uint _id)
     public
     view
     returns (
@@ -309,8 +306,8 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
     )
     {
         // Assign values to the parameters
-        Component memory component = components[_upc];
-        componentUPC = _upc;
+        Component memory component = components[_id];
+        componentUPC = _id;
         equipmentID = component.equipmentID;
         state = component.state;
         originManufacturerName = component.originManufacturerName;
@@ -318,7 +315,7 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
         supplierID = component.supplierID;
     }
 
-    function fetchEquipment(uint _upc)
+    function fetchEquipment(uint _id)
     public
     view
     returns (
@@ -336,8 +333,8 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
     )
     {
         // Assign values to the 7 parameters
-        Equipment memory equipment = equipments[_upc];
-        equipmentUPC = _upc;
+        Equipment memory equipment = equipments[_id];
+        equipmentUPC = _id;
         componentID = equipment.componentID;
         aircraftMsn = equipment.msn;
         price = equipment.price;
