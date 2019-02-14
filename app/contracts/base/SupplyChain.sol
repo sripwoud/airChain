@@ -4,10 +4,14 @@ import "../accesscontrol/ManufacturerRole.sol";
 import "../accesscontrol/CustomerRole.sol";
 import "../accesscontrol/TransporterRole.sol";
 
-
 // Define a contract 'Supplychain'
 // note that by inheriting all these contracts, the deployer of this contract will have all roles!);
-contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), CustomerRole("Owner"), TransporterRole("Owner") {
+contract SupplyChain is
+SupplierRole("Owner"),
+ManufacturerRole("Owner"),
+CustomerRole("Owner"),
+TransporterRole("Owner") {
+
     // Define "owner"
     address payable owner;
 
@@ -19,8 +23,9 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
      Price should be shared between supplier and manufacturer via e.g a shared catalog.
      As part of the contract data they are visible by anyone anyway.
      */
-    uint public equipmentPrice = 10;
-    uint public aircraftPrice = equipmentPrice * 10000000;
+    uint public equipmentPrice = 1000; //
+    uint public aircraftPrice = 1000000000000000000; // 1 ETH
+    uint public transportFee = 100; //
     // Define a public mappings 'assets' that maps the UPC to an asset.
     mapping (uint => Component) components;
     mapping (uint => Equipment) equipments;
@@ -31,6 +36,10 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
     // that track its journey through the supply chain -- to be sent from DApp.
     mapping (uint => string[]) componentsHistory;
     mapping (uint => string[]) equipmentsHistory;
+
+    // define the mapping for the withdrawal pattern
+    // see https://solidity.readthedocs.io/en/v0.5.3/common-patterns.html#withdrawal-from-contracts
+    mapping (address => uint) public pendingWithdrawals;
 
     // Define enum 'State' with the following values:
     enum State {
@@ -159,14 +168,22 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
         }
     }
 
+    // Allows users to withdraw their payments from the contract
+    function withdraw() public {
+        uint amount = pendingWithdrawals[msg.sender];
+        pendingWithdrawals[msg.sender] = 0;
+        msg.sender.transfer(amount);
+    }
+
     // function to order an AC. Customer provides the equipment he wants and the manufacterID
     function orderAircraft(uint _equipmentID, address payable _manufacturerID)
     public
     payable
-    // onlyCustomer
-    // paidEnough(0.5 * aircraftPrice)
-    // checkValue(0.5 * aircraftPrice)
+    onlyCustomer
+    paidEnough(500000000000000000)
+    checkValue(500000000000000000)
     {
+        pendingWithdrawals[_manufacturerID] += 500000000000000000;
         aircrafts[msn] = Aircraft(
             msn,
             _equipmentID,
@@ -192,10 +209,11 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
     payable
     onlyManufacturer
     ordered(_msn)
-    // TO DO: implement payments with withdraw pattern!!
-    // paidEnough(equipments[_id].price)
-    // checkValue(equipments[_id].price)
+    paidEnough(equipmentPrice)
+    checkValue(equipmentPrice)
     {
+        pendingWithdrawals[_supplierID] += equipmentPrice;
+
         // Add the new Component as part of the mapping
         equipments[_equipmentID] = Equipment(
             _equipmentID,
@@ -280,11 +298,17 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
 
     function packEquipment(uint _equipmentID, address payable _transporterID)
     public
+    payable
     onlySupplier
     assembled(_equipmentID)
     // verify that caller is the supplier that was contracted by manufacturer that ordered the equipment
     verifyCaller(equipments[_equipmentID].supplierID)
+    // Supplier pays halfs the transportFee at expedition stage
+    paidEnough(50)
+    checkValue(50)
     {
+        pendingWithdrawals[_transporterID] += 50;
+
         equipments[_equipmentID].state = State.Packed;
         equipments[_equipmentID].transporterID = _transporterID;
 
@@ -305,13 +329,17 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
 
     function receiveEquipment(uint _equipmentID)
     public
+    payable
     onlyManufacturer
     inTransit(_equipmentID)
     // verify that caller is the manufactuer that ordered the equipment in the first place
     verifyCaller(equipments[_equipmentID].manufacturerID)
-    // payEnough()
-    // checkValue()
+    // manufactuer pays second half of the transportFee
+    paidEnough(50)
+    checkValue(50)
     {
+        pendingWithdrawals[equipments[_equipmentID].transporterID] += 50;
+
         equipments[_equipmentID].state = State.Received;
         equipments[_equipmentID].ownerID = msg.sender;
 
@@ -342,19 +370,25 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
         emit Assembled("Aircraft", equipments[_equipmentID].msn);
     }
 
-    function receiveAircraft(uint _msn)
-    public
-    onlyCustomer
-    assembled(_msn)
-    verifyCaller(aircrafts[_msn].customerID)
-    {
-        aircrafts[_msn].state = State.Received;
-        aircrafts[_msn].ownerID = msg.sender;
+    // function receiveAircraft(uint _msn)
+    // public
+    // payable
+    // onlyCustomer
+    // assembled(_msn)
+    // verifyCaller(aircrafts[_msn].customerID)
+    // // customer pays second half at aircraft reception
+    // paidEnough(500000000000000000)
+    // checkValue(500000000000000000)
+    // {
+    //     pendingWithdrawals[aircrafts[_msn].manufacturerID] += 500000000000000000;
+    //
+    //     aircrafts[_msn].state = State.Received;
+    //     aircrafts[_msn].ownerID = msg.sender;
+    //
+    //     emit Received("Aircraft", _msn);
+    // }
 
-        emit Received("Aircraft", _msn);
-    }
     // Define functions 'fetchAsset' that fetches the data of a given asset
-
     function fetchComponent(uint _id)
     public
     view
