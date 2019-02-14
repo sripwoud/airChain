@@ -304,7 +304,10 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
     // payEnough()
     // checkValue()
     {
+        equipments[_equipmentID].state = State.Received;
+        equipments[_equipmentID].ownerID = msg.sender;
 
+        emit Received("Equipment", _equipmentID);
     }
 
     // Define functions 'fetchAsset' that fetches the data of a given asset

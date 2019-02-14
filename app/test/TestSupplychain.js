@@ -278,6 +278,24 @@ contract('SupplyChain', function (accounts) {
       return event.id == equipmentUPC
     })
   })
+
+  it('a manufacturer can receive an equipment', async () => {
+    const supplyChain = await SupplyChain.deployed()
+
+    // Manufactuer marks item as InTransit
+    const tx = await supplyChain.receiveEquipment(equipmentUPC, { from: manufacturerID })
+
+    // Fetch equipment
+    const equipment = await supplyChain.fetchEquipment(equipmentUPC)
+
+    // Checks
+    assert.equal(equipment[4], 5, 'Error: equipment state should be "Received" (5) at this stage')
+    assert.equal(equipment[5], manufacturerID, 'Error: missing or invalid owner address')
+
+    truffleAssert.eventEmitted(tx, 'Received', event => {
+      return event.id == equipmentUPC
+    })
+  })
 /*
     it('Testing smart contract function shipItem() that allows a distributor to ship coffee', async() => {
         const supplyChain = await SupplyChain.deployed()
