@@ -234,13 +234,23 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
         emit Received("Component", _upc);
     }
 
-    function processComponent(uint _upc)
+    function processComponent(
+        uint _upc,
+        string memory _originPlant,
+        string memory _equipmentNotes
+    )
     public
     onlySupplier
     received(_upc)
     {
         components[_upc].state = State.Integrated;
+
+        equipments[components[_upc].equipmentID].componentID = _upc;
         equipments[components[_upc].equipmentID].state = State.Assembled;
+        equipments[components[_upc].equipmentID].ownerID = msg.sender;
+        equipments[components[_upc].equipmentID].originPlant = _originPlant;
+        equipments[components[_upc].equipmentID].equipmentNotes = _equipmentNotes;
+
         emit Integrated("Component", _upc);
         emit Assembled("Equipment", components[_upc].equipmentID);
     }

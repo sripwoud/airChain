@@ -12,9 +12,9 @@ contract('SupplyChain', function (accounts) {
   const componentUPC = 2
   const ownerID = accounts[0]
   const originManufacturerName = 'Bosch'
-  const originPlant = 'Aurich'
-  const componentNotes = 'Best parts for Galleys'
-  var componentState = 0
+  const originPlantComponent = 'Aurich'
+  const originPlantEquipment = 'Augsburg'
+  const equipmentNotes = 'Best Galley'
   const supplierID = accounts[1]
   const transporterID = accounts[2]
   const manufacturerID = accounts[3]
@@ -167,7 +167,7 @@ contract('SupplyChain', function (accounts) {
     const tx = await supplyChain.receiveComponent(
       componentUPC,
       originManufacturerName,
-      originPlant,
+      originPlantComponent,
       equipmentUPC,
       { from: supplierID })
     // Retrieve saved Component from blockchain with fetchComponent()
@@ -178,7 +178,7 @@ contract('SupplyChain', function (accounts) {
     assert.equal(component[1], equipmentUPC, 'Error: missing or Invalid equipment UPC')
     assert.equal(component[2], 6, 'Error: state should be "ordered" (6) at this stage')
     assert.equal(component[3], originManufacturerName, 'Error: Missing or Invalid originManufacturerName')
-    assert.equal(component[4], originPlant, 'Error: Missing or Invalid originPlant')
+    assert.equal(component[4], originPlantComponent, 'Error: Missing or Invalid originPlant')
     assert.equal(component[5], supplierID, 'Error: Missing or Invalid supplierID')
 
     // check event:
@@ -186,27 +186,37 @@ contract('SupplyChain', function (accounts) {
       return ev.asset === 'Component' && ev.id == componentUPC
     })
   })
-/*
-  // equipment: upc 1
-  // component upc 2
-  // upc = 3
+
   it('a supplier can process a component', async () => {
     const supplyChain = await SupplyChain.deployed()
-    // Mark a component as integrated and an equipment as assembled:
-    const tx = await supplyChain.processComponent(2, { from: supplierID })
-    const equipment = await supplyChain.fetchEquipment(1)
-    const component = await supplyChain.fetchComponent(2)
+    // Supplier marks component as integrated and equipment as assembled
+    const tx = await supplyChain.processComponent(
+      componentUPC,
+      originPlantEquipment,
+      equipmentNotes,
+      { from: supplierID })
 
-    assert.equal(equipment[6], 2, "Error: missing or invalid equipment state. Should be 'Assembled'")
-    assert.equal(component[5], 7, "Error: missing or invalid equipment state. Should be 'Integrated'")
+    // Fetch assets
+    const equipment = await supplyChain.fetchEquipment(equipmentUPC)
+    const component = await supplyChain.fetchComponent(componentUPC)
+
+    // Check assets attributes
+    assert.equal(component[2], 7, "Error: component state should be 'Integrated'")
+
+    assert.equal(equipment[1], componentUPC, 'Error: missing or invalid componentID')
+    assert.equal(equipment[4], 2, 'Error: equipment state should be "Assembled"')
+    assert.equal(equipment[5], supplierID, 'Error: missing or invalid owner address')
+    assert.equal(equipment[7], originPlantEquipment, 'Error: missing or invalid originPlantEquipment')
+    assert.equal(equipment[8], equipmentNotes, 'Error: missing or invalid equipmentNotes')
+
     truffleAssert.eventEmitted(tx, 'Assembled', event => {
-      return event.asset === 'Equipment' && event.id == 1
+      return event.asset === 'Equipment' && event.id == equipmentUPC
     })
     truffleAssert.eventEmitted(tx, 'Integrated', event => {
-      return event.asset === 'Component' && event.id == 2
+      return event.asset === 'Component' && event.id == componentUPC
     })
   })
-
+/*
   it('a manufacturer can prepare the structure of an aircraft', async () => {
     const supplyChain = await SupplyChain.deployed()
 
