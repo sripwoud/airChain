@@ -148,7 +148,7 @@ contract('SupplyChain', function (accounts) {
     assert.equal(equipment[1], 0, 'Error: componentID should be 0 at this stage')
     assert.equal(equipment[2], 1, 'Error: invalid or missing msn')
     assert.equal(equipment[3], equipmentPrice, 'Error: Missing or Invalid price')
-    assert.equal(equipment[4], 1, 'Error: state should be ordered at this stage')
+    assert.equal(equipment[4], 1, 'Error: state should be ordered (1) at this stage')
     assert.equal(equipment[5], emptyAddress, 'Error: owner address should be empty at this stage')
     assert.equal(equipment[6], supplierID, 'Error: Missing or Invalid supplierID')
     assert.equal(equipment[7], '', 'Error: originPlant should be empty at this stage')
@@ -178,7 +178,7 @@ contract('SupplyChain', function (accounts) {
     // Checks
     assert.equal(component[0], componentUPC, 'Error: missing or invalid component UPC')
     assert.equal(component[1], equipmentUPC, 'Error: missing or Invalid equipment UPC')
-    assert.equal(component[2], 6, 'Error: state should be "ordered" (6) at this stage')
+    assert.equal(component[2], 5, 'Error: state should be "received" (5) at this stage')
     assert.equal(component[3], originManufacturerName, 'Error: Missing or Invalid originManufacturerName')
     assert.equal(component[4], originPlantComponent, 'Error: Missing or Invalid originPlant')
     assert.equal(component[5], supplierID, 'Error: Missing or Invalid supplierID')
@@ -203,10 +203,10 @@ contract('SupplyChain', function (accounts) {
     const component = await supplyChain.fetchComponent(componentUPC)
 
     // Check assets attributes
-    assert.equal(component[2], 7, "Error: component state should be 'Integrated'")
+    assert.equal(component[2], 6, "Error: component state should be 'Integrated' (6) at this stage")
 
     assert.equal(equipment[1], componentUPC, 'Error: missing or invalid componentID')
-    assert.equal(equipment[4], 2, 'Error: equipment state should be "Assembled"')
+    assert.equal(equipment[4], 2, 'Error: equipment state should be "Assembled" (2) at this stage')
     assert.equal(equipment[5], supplierID, 'Error: missing or invalid owner address')
     assert.equal(equipment[7], originPlantEquipment, 'Error: missing or invalid originPlantEquipment')
     assert.equal(equipment[8], equipmentNotes, 'Error: missing or invalid equipmentNotes')
@@ -233,7 +233,7 @@ contract('SupplyChain', function (accounts) {
     const aircraft = await supplyChain.fetchAircraft(1)
 
     // Checks
-    assert.equal(aircraft[3], 8, 'Error: aircraft state should be "StructureReady" at this stage')
+    assert.equal(aircraft[3], 7, 'Error: aircraft state should be "StructureReady" (7) at this stage')
     assert.equal(aircraft[4], manufacturerID, 'Error:missing or invalid manufacturerID')
     assert.equal(aircraft[6], originPlantAircraft, 'Error:missing or invalid originPlantAircraft')
     assert.equal(aircraft[7], aircraftNotes, 'Error:missing or invalid aircraftNotes')
@@ -253,7 +253,7 @@ contract('SupplyChain', function (accounts) {
     const equipment = await supplyChain.fetchEquipment(equipmentUPC)
 
     // Checks
-    assert.equal(equipment[4], 3, 'Error: equipment state should be "Packed" at this stage')
+    assert.equal(equipment[4], 3, 'Error: equipment state should be "Packed" (3) at this stage')
     assert.equal(equipment[9], transporterID, 'Error: missing or invalid transporter address')
 
     truffleAssert.eventEmitted(tx, 'Packed', event => {
