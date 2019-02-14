@@ -130,7 +130,7 @@ contract('SupplyChain', function (accounts) {
     })
   })
 
-  it('a manufacturer can order an equipment', async () => {
+  it('a manufacturer can order an equipment for an Ordered aircraft', async () => {
     const supplyChain = await SupplyChain.deployed()
 
     // Manufacturer marks equipment as ordered
@@ -162,7 +162,7 @@ contract('SupplyChain', function (accounts) {
     })
   })
 
-  it('a supplier can receive a component', async () => {
+  it('a supplier can receive a Component for an Ordered Equipment', async () => {
     const supplyChain = await SupplyChain.deployed()
 
     // Supplier marks component as received
@@ -189,7 +189,7 @@ contract('SupplyChain', function (accounts) {
     })
   })
 
-  it('a supplier can process a component', async () => {
+  it('a supplier can process a Received Component to assemble an Ordered Equipment', async () => {
     const supplyChain = await SupplyChain.deployed()
     // Supplier marks component as integrated and equipment as assembled
     const tx = await supplyChain.processComponent(
@@ -219,7 +219,7 @@ contract('SupplyChain', function (accounts) {
     })
   })
 
-  it('a manufacturer can prepare the structure of an aircraft', async () => {
+  it('a manufacturer can prepare the structure of an Ordered Aircraft', async () => {
     const supplyChain = await SupplyChain.deployed()
 
     // Manufacturer marks AC as structureReady
@@ -243,7 +243,7 @@ contract('SupplyChain', function (accounts) {
     })
   })
 
-  it('a supplier can pack an equipment', async () => {
+  it('a supplier can pack an Equipment he assembled', async () => {
     const supplyChain = await SupplyChain.deployed()
 
     // Supplier marks item as packed
@@ -261,7 +261,7 @@ contract('SupplyChain', function (accounts) {
     })
   })
 
-  it('a transporter can transport an equipment', async () => {
+  it('a transporter can transport a Packed Equipment', async () => {
     const supplyChain = await SupplyChain.deployed()
 
     // Transporter marks item as InTransit
@@ -279,7 +279,7 @@ contract('SupplyChain', function (accounts) {
     })
   })
 
-  it('a manufacturer can receive an equipment', async () => {
+  it('a manufacturer can receive an InTransit Equipment he ordered', async () => {
     const supplyChain = await SupplyChain.deployed()
 
     // Manufactuer marks item as InTransit
@@ -297,7 +297,7 @@ contract('SupplyChain', function (accounts) {
     })
   })
 
-  it('a manufacturer can process an equipment', async () => {
+  it('a manufacturer can process a Received Equipment to assemble a StructureReady Aircraft that a customer ordered him', async () => {
     const supplyChain = await SupplyChain.deployed()
 
     // Manufactuer marks equipment as Integrated and aircraft as Assembled
@@ -317,6 +317,31 @@ contract('SupplyChain', function (accounts) {
       return event.asset === 'Equipment' && event.id == equipmentUPC
     })
     truffleAssert.eventEmitted(tx, 'Assembled', event => {
+      return event.asset === 'Aircraft' && event.id == 1
+    })
+  })
+
+  it('a customer can receive an Assembled aircraft he ordered', async () => {
+    const supplyChain = await SupplyChain.deployed()
+
+    // Customer marks aircraft as received
+    const tx = await supplyChain.receiveAircraft(1, { from: customerID })
+
+    // Fetch aircraft
+    const aircraft = await supplyChain.fetchAircraft(1)
+
+    // Checks
+    assert.equal(aircraft[0], 1, 'Error: invalid msn')
+    assert.equal(aircraft[1], equipmentUPC, 'Error: invalid equipmentID')
+    assert.equal(aircraft[2], aircraftPrice, 'Error: invalid aircraftPrice')
+    assert.equal(aircraft[3], 5, 'Error: aircraft state should be "Received"')
+    assert.equal(aircraft[4], customerID, 'Error: invalid ownerID')
+    assert.equal(aircraft[5], manufacturerID, 'Error: invalid manufacturerID')
+    assert.equal(aircraft[6], originPlantAircraft, 'Error: invalid originPlantAircraft')
+    assert.equal(aircraft[7], aircraftNotes + ', Assembly stage: ' + 'No further notes', 'Error: invalid aircraftNotes')
+    assert.equal(aircraft[8], customerID, 'Error: invalid customer address')
+
+    truffleAssert.eventEmitted(tx, 'Received', event => {
       return event.asset === 'Aircraft' && event.id == 1
     })
   })

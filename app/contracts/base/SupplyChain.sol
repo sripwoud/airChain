@@ -96,7 +96,7 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
     }
 
     modifier verifyCaller (address _address) {
-        require(msg.sender == _address);
+        require(msg.sender == _address, "Caller not allowed to execute this function");
         _;
     }
 
@@ -123,8 +123,10 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
         _;
     }
 
-    modifier assembled(uint _id) {
-        require(equipments[_id].state == State.Assembled);
+    modifier assembled(uint _idOrMsn) {
+        require(
+            equipments[_idOrMsn].state == State.Assembled || aircrafts[_idOrMsn].state == State.Assembled,
+            "Missing asset or asset in the wrong state");
         _;
     }
 
@@ -243,6 +245,7 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
     public
     onlySupplier
     received(_componentID)
+    ordered(components[_componentID].equipmentID)
     // verify that caller is the same as the supplier contracted by the manufacturer who ordered the equipment
     verifyCaller(equipments[components[_componentID].equipmentID].supplierID)
     {
@@ -339,7 +342,19 @@ contract SupplyChain is SupplierRole("Owner"), ManufacturerRole("Owner"), Custom
         emit Assembled("Aircraft", equipments[_equipmentID].msn);
     }
 
+    function receiveAircraft(uint _msn)
+    public
+    onlyCustomer
+    assembled(_msn)
+    verifyCaller(aircrafts[_msn].customerID)
+    {
+        aircrafts[_msn].state = State.Received;
+        aircrafts[_msn].ownerID = msg.sender;
+
+        emit Received("Aircraft", _msn);
+    }
     // Define functions 'fetchAsset' that fetches the data of a given asset
+
     function fetchComponent(uint _id)
     public
     view
