@@ -28,7 +28,7 @@ contract CustomerRole {
     function getNameCustomer(address account) public view returns (string memory) {
         return customers.getName(account);
     }
-    
+
     // Define a function 'isCustomer' to check this role
     function isCustomer(address account) public view returns (bool) {
         return customers.has(account);
@@ -40,8 +40,8 @@ contract CustomerRole {
     }
 
     // Define a function 'renounceCustomer' to renounce this role
-    function renounceCustomer(address account) public {
-        _removeCustomer(account);
+    function renounceCustomer() public {
+        _removeCustomer(msg.sender);
     }
 
     // Define an internal function '_addCustomer' to add this role, called by 'addCustomer'
