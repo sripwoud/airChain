@@ -242,26 +242,24 @@ contract('SupplyChain', function (accounts) {
       return event.msn == 1
     })
   })
-/*
-    it('Testing smart contract function buyItem() that allows a distributor to buy coffee', async() => {
-        const supplyChain = await SupplyChain.deployed()
 
-        // Declare and Initialize a variable for event
+  it('a supplier can pack an equipment', async () => {
+    const supplyChain = await SupplyChain.deployed()
 
+    // Supplier marks item as packed
+    const tx = await supplyChain.packEquipment(equipmentUPC, transporterID, { from: supplierID })
 
-        // Watch the emitted event Sold()
-        var event = supplyChain.Sold()
+    // Fetch equipment
+    const equipment = await supplyChain.fetchEquipment(equipmentUPC)
 
+    // Checks
+    assert.equal(equipment[4], 3, 'Error: equipment state should be "Packed" at this stage')
+    assert.equal(equipment[9], transporterID, 'Error: missing or invalid transporter address')
 
-        // Mark an item as Sold by calling function buyItem()
-
-
-        // Retrieve the just now saved item from blockchain by calling function fetchItem()
-
-
-        // Verify the result set
-
+    truffleAssert.eventEmitted(tx, 'Packed', event => {
+      return event.id == equipmentUPC
     })
+  })
 /*
     it('Testing smart contract function shipItem() that allows a distributor to ship coffee', async() => {
         const supplyChain = await SupplyChain.deployed()
