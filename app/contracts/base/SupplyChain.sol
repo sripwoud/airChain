@@ -4,6 +4,7 @@ import "../accesscontrol/ManufacturerRole.sol";
 import "../accesscontrol/CustomerRole.sol";
 import "../accesscontrol/TransporterRole.sol";
 
+
 // Define a contract 'Supplychain'
 // note that by inheriting all these contracts, the deployer of this contract will have all roles!);
 contract SupplyChain is
@@ -180,10 +181,10 @@ TransporterRole("Owner") {
     public
     payable
     onlyCustomer
-    paidEnough(500000000000000000)
-    checkValue(500000000000000000)
+    paidEnough(aircraftPrice / 2)
+    checkValue(aircraftPrice / 2)
     {
-        pendingWithdrawals[_manufacturerID] += 500000000000000000;
+        pendingWithdrawals[_manufacturerID] += aircraftPrice / 2;
         aircrafts[msn] = Aircraft(
             msn,
             _equipmentID,
@@ -335,10 +336,10 @@ TransporterRole("Owner") {
     // verify that caller is the manufactuer that ordered the equipment in the first place
     verifyCaller(equipments[_equipmentID].manufacturerID)
     // manufactuer pays second half of the transportFee
-    paidEnough(50)
-    checkValue(50)
+    paidEnough(transportFee / 2)
+    checkValue(transportFee / 2)
     {
-        pendingWithdrawals[equipments[_equipmentID].transporterID] += 50;
+        pendingWithdrawals[equipments[_equipmentID].transporterID] += transportFee / 2;
 
         equipments[_equipmentID].state = State.Received;
         equipments[_equipmentID].ownerID = msg.sender;
@@ -370,6 +371,7 @@ TransporterRole("Owner") {
         emit Assembled("Aircraft", equipments[_equipmentID].msn);
     }
 
+    // !!!!!!!!!!!!!! CAUSE OUT OF GAS ERROR
     // function receiveAircraft(uint _msn)
     // public
     // payable
@@ -377,10 +379,10 @@ TransporterRole("Owner") {
     // assembled(_msn)
     // verifyCaller(aircrafts[_msn].customerID)
     // // customer pays second half at aircraft reception
-    // paidEnough(500000000000000000)
-    // checkValue(500000000000000000)
+    // paidEnough(aircraftPrice / 2)
+    // checkValue(aircraftPrice / 2)
     // {
-    //     pendingWithdrawals[aircrafts[_msn].manufacturerID] += 500000000000000000;
+    //     pendingWithdrawals[aircrafts[_msn].manufacturerID] += aircraftPrice / 2;
     //
     //     aircrafts[_msn].state = State.Received;
     //     aircrafts[_msn].ownerID = msg.sender;
