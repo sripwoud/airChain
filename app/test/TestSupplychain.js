@@ -342,31 +342,44 @@ contract('SupplyChain', function (accounts) {
     })
   })
 
-  // it('a customer can receive an Assembled aircraft he ordered', async () => {
+  it('a customer can receive an Assembled aircraft he ordered', async () => {
+    const supplyChain = await SupplyChain.deployed()
+
+    // Customer marks aircraft as received
+    const tx = await supplyChain.receiveAircraft(1, { from: customerID, value: aircraftPrice * 0.5 })
+
+    // Fetch aircraft
+    const aircraft = await supplyChain.fetchAircraft(1)
+
+    // Checks
+    assert.equal(aircraft[0], 1, 'Error: invalid msn')
+    assert.equal(aircraft[1], equipmentUPC, 'Error: invalid equipmentID')
+    assert.equal(aircraft[2], aircraftPrice, 'Error: invalid aircraftPrice')
+    assert.equal(aircraft[3], 5, 'Error: aircraft state should be "Received"')
+    assert.equal(aircraft[4], customerID, 'Error: invalid ownerID')
+    assert.equal(aircraft[5], manufacturerID, 'Error: invalid manufacturerID')
+    assert.equal(aircraft[6], originPlantAircraft, 'Error: invalid originPlantAircraft')
+    assert.equal(aircraft[7], aircraftNotes + ', Assembly stage: ' + 'No further notes', 'Error: invalid aircraftNotes')
+    assert.equal(aircraft[8], customerID, 'Error: invalid customer address')
+
+    // Check money transfer
+    assert.equal(await supplyChain.pendingWithdrawals(manufacturerID), aircraftPrice)
+
+    truffleAssert.eventEmitted(tx, 'Received', event => {
+      return event.asset === 'Aircraft' && event.id == 1
+    })
+  })
+
+  // it('a supplier can withdraw his money', async () => {
   //   const supplyChain = await SupplyChain.deployed()
+  //   console.log(await supplyChain.pendingWithdrawals(supplierID))
+  //   // console.log(await supplyChain.pendingWithdrawals(supplierID))
+  //   // console.log(await supplyChain.pendingWithdrawals(transporterID))
   //
-  //   // Customer marks aircraft as received
-  //   const tx = await supplyChain.receiveAircraft(1, { from: customerID, value: aircraftPrice * 0.5 })
-  //
-  //   // Fetch aircraft
-  //   const aircraft = await supplyChain.fetchAircraft(1)
-  //
-  //   // Checks
-  //   assert.equal(aircraft[0], 1, 'Error: invalid msn')
-  //   assert.equal(aircraft[1], equipmentUPC, 'Error: invalid equipmentID')
-  //   assert.equal(aircraft[2], aircraftPrice, 'Error: invalid aircraftPrice')
-  //   assert.equal(aircraft[3], 5, 'Error: aircraft state should be "Received"')
-  //   assert.equal(aircraft[4], customerID, 'Error: invalid ownerID')
-  //   assert.equal(aircraft[5], manufacturerID, 'Error: invalid manufacturerID')
-  //   assert.equal(aircraft[6], originPlantAircraft, 'Error: invalid originPlantAircraft')
-  //   assert.equal(aircraft[7], aircraftNotes + ', Assembly stage: ' + 'No further notes', 'Error: invalid aircraftNotes')
-  //   assert.equal(aircraft[8], customerID, 'Error: invalid customer address')
-  //
-  //   // Check money transfer
-  //   assert.equal(await supplyChain.pendingWithdrawals(manufacturerID), aircraftPrice)
-  //
-  //   truffleAssert.eventEmitted(tx, 'Received', event => {
-  //     return event.asset === 'Aircraft' && event.id == 1
-  //   })
+  //   const balanceBefore = await web3.eth.getBalance(supplierID)
+  //   console.log(balanceBefore)
+  //   await supplyChain.withdraw({ from: supplierID })
+  //   // const balanceAfter = await web3.eth.getBalance(ownerID)
+  //   // assert.isAbove(+balanceAfter, +balanceBefore)
   // })
 })
