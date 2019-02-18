@@ -372,23 +372,23 @@ TransporterRole("Owner") {
     }
 
     // !!!!!!!!!!!!!! CAUSE OUT OF GAS ERROR
-    // function receiveAircraft(uint _msn)
-    // public
-    // payable
-    // onlyCustomer
-    // assembled(_msn)
-    // verifyCaller(aircrafts[_msn].customerID)
-    // // customer pays second half at aircraft reception
-    // paidEnough(aircraftPrice / 2)
-    // checkValue(aircraftPrice / 2)
-    // {
-    //     pendingWithdrawals[aircrafts[_msn].manufacturerID] += aircraftPrice / 2;
-    //
-    //     aircrafts[_msn].state = State.Received;
-    //     aircrafts[_msn].ownerID = msg.sender;
-    //
-    //     emit Received("Aircraft", _msn);
-    // }
+    function receiveAircraft(uint _msn)
+    public
+    payable
+    onlyCustomer
+    assembled(_msn)
+    verifyCaller(aircrafts[_msn].customerID)
+    // customer pays second half at aircraft reception
+    paidEnough(aircraftPrice / 2)
+    checkValue(aircraftPrice / 2)
+    {
+        pendingWithdrawals[aircrafts[_msn].manufacturerID] += aircraftPrice / 2;
+
+        aircrafts[_msn].state = State.Received;
+        aircrafts[_msn].ownerID = msg.sender;
+
+        emit Received("Aircraft", _msn);
+    }
 
     // Define functions 'fetchAsset' that fetches the data of a given asset
     function fetchComponent(uint _id)
