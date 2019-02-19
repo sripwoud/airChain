@@ -1,0 +1,25 @@
+{
+  "name": "airchain",
+  "version": "1.0.0",
+  "description": "This repository containts an Ethereum DApp that demonstrates a Supply Chain flow between a Customer, a Manufacturer, a Supplier and a Transporter during the manufacturing of an aircraft.",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gry0u/AirChain.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Gry0u/AirChain/issues"
+  },
+  "homepage": "https://github.com/Gry0u/AirChain#readme",
+  "dependencies": {
+    "truffle-assertions": "^0.8.0"
+  }
+}
