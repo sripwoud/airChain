@@ -116,10 +116,9 @@ TransporterRole("Owner") {
     }
 
     // Define a modifier that checks the price and refunds the remaining balance
-    modifier checkValue(uint _id) {
-        uint _price = equipments[_id].price;
+    modifier checkValue(uint _price) {
         uint amountToReturn = msg.value - _price;
-        equipments[_id].manufacturerID.transfer(amountToReturn);
+        msg.sender.transfer(amountToReturn);
         _;
     }
 
@@ -184,6 +183,7 @@ TransporterRole("Owner") {
     paidEnough(aircraftPrice / 2)
     checkValue(aircraftPrice / 2)
     {
+        require(isManufacturer(_manufacturerID), "The address provided does not belong to a Manufacturer!");
         pendingWithdrawals[_manufacturerID] += aircraftPrice / 2;
         aircrafts[msn] = Aircraft(
             msn,
@@ -213,6 +213,7 @@ TransporterRole("Owner") {
     paidEnough(equipmentPrice)
     checkValue(equipmentPrice)
     {
+        require(isSupplier(_supplierID), "The address provided does not belong to a Supplier!");
         pendingWithdrawals[_supplierID] += equipmentPrice;
 
         // Add the new Component as part of the mapping
@@ -308,6 +309,7 @@ TransporterRole("Owner") {
     paidEnough(50)
     checkValue(50)
     {
+        require(isTransporter(_transporterID), "The address provided does not belong to a Transporter!");
         pendingWithdrawals[_transporterID] += 50;
 
         equipments[_equipmentID].state = State.Packed;
