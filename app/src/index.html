@@ -14,63 +14,74 @@
     </nav>
   </header>
   <main>
+    <h2>Status</h2>
+    <pre id="status"></pre>
     <section>
         <h2>Roles management</h2>
-        <label>Ethereum Address
-          <input type="text" id="roleAddress" required>
-        </label>
-        <label>Name
-          <input type="text" id="roleName">
-        </label><br>
-        <radiogroup>
-          <label>Customer
-            <input type="radio" name='role' value='customer'>
+        <form action="" onsubmit="App.addRole();return false;">
+          <label>Ethereum Address
+            <input type="text" id="roleAddress" required>
           </label>
-          <label>Manufacturer
-            <input type="radio" name='role' value='manufacturer'>
-          </label>
-          <label>Supplier
-            <input type="radio"  name='role' value='supplier'>
-          </label>
-          <label>Transporter
-            <input type="radio" name='role' value='transporter'>
+          <label>Name
+            <input type="text" id="roleName">
           </label><br>
-        </radiogroup>
-        <button onclick='App.addRole()'>Add</button>
-        <button onclick='App.renounceRole()'>Renounce</button><br>
+          <radiogroup>
+            <label>Customer
+              <input type="radio" name='role' value='customer'>
+            </label>
+            <label>Manufacturer
+              <input type="radio" name='role' value='manufacturer'>
+            </label>
+            <label>Supplier
+              <input type="radio"  name='role' value='supplier'>
+            </label>
+            <label>Transporter
+              <input type="radio" name='role' value='transporter'>
+            </label><br>
+          </radiogroup>
+          <input type='submit' value='Add'>
+        </form>
+          <button onclick='App.renounceRole()'>Renounce</button><br>
+
       </section>
       <section>
         <h2>Customer actions</h2>
-        <label>Equipment ID
-          <input type="text" id="orderACEqID">
-        </label>
-        <label>Manufacturer address
-          <input type="text" id="orderACManufacturer">
-        </label>
-        <button id="createStar" onclick='App.orderAircraft()'>Order Aircraft</button><br>
-        <label>MSN
-          <input type="text" id="receiveMSN">
-        </label>
-        <button onclick='App.receiveAircraft()'>Receive Aircraft</button><br>
+        <form onsubmit="App.orderAircraft();return false;">
+          <label>Equipment ID
+            <input type="text" id="orderACEqID" required>
+          </label>
+          <label>Manufacturer address
+            <input type="text" id="orderACManufacturer" required>
+          </label>
+          <input type='submit' value='Order Aircraft'<br>
+        </form>
+        <form onsubmit='App.receiveAircraft();return false;'>
+          <label>MSN
+            <input type="text" id="receiveMSN" required>
+          </label>
+          <input type='submit' value='Receive Aircraft'>
+        </form>
       </section>
       <section>
         <h2>Manufacturer actions</h2>
-        <label>Equipment ID
-          <input type="text" id="orderEqID">
-        </label>
-        <label>Supplier Address
-          <input type="text" id="orderEqSupplierID">
-        </label><br>
-        <label>MSN
-          <input type="text" id="orderEqMSN">
-        </label>
+        <form onsubmit='App.orderEquipment();return false;'>
+          <label>Equipment ID
+            <input type="text" id="orderEqID" required>
+          </label>
+          <label>Supplier Address
+            <input type="text" id="orderEqSupplierID" required>
+          </label>
+          <label>MSN
+            <input type="text" id="orderEqMSN">
+          </label>
+          <input type='submit' value='Order Equipment'>
+        </form>
         <label>MSN Origin Plant
           <input type="text" id="MSNOrig">
         </label>
         <label>MSN Notes
           <input type="text" id="MSNNotes"><br>
         </label>
-        <button onclick='App.orderEquipment()'>Order Equipment</button>
         <button onclick='App.receiveEquipment()'>Receive Equipment</button>
         <button onclick='App.prepareStructure()'>Prepare Structure</button>
         <button onclick='App.processEquipment()'>Process Equipment</button><br>
@@ -133,9 +144,7 @@
           <button onclick='App.fetchAsset()'>Fetch Asset</button>
         </radiogroup>
       </section>
-
   </main>
-  <pre id="status">Status</pre>
   <footer>
     <!-- <h2 class="contact_title">Contact</h2>
     <ul class="contact_wrapper">
