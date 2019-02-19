@@ -50,6 +50,60 @@ const App = {
     } catch (error) {
       console.error('Could not connect to contract or chain.')
     }
+
+    // event listeners
+    // this.supplyChain.events.Ordered()
+    //   .on('data', (log) => {
+    //     const { returnValues: { asset, id } } = log
+    //     // console.log('data', asset, id)
+    //     this.setStatus(`${asset} ${id} ordered`)
+    //   })
+    const { Ordered, Assembled, Packed, InTransit, Received, Integrated, StructureReady, ManufacturerAdded, ManufacturerRemoved, CustomerAdded, CustomerRemoved, SupplierAdded, SupplierRemoved, TransporterAdded, TransporterRemoved } = this.supplyChain.events
+    const events1 = {
+      ordered: Ordered,
+      assembled: Assembled,
+      received: Received,
+      integrated: Integrated
+    }
+    const events2 = {
+      'manufacturer added': ManufacturerAdded,
+      'manufacturer removed': ManufacturerRemoved,
+      'customer added': CustomerAdded,
+      'customer removed': CustomerRemoved,
+      'supplier added': SupplierAdded,
+      'supplier removed': SupplierRemoved,
+      'transporter removed': TransporterRemoved,
+      'transporter added': TransporterAdded
+    }
+    for (let ev in events1) {
+      events1[ev]()
+        .on('data', (log) => {
+          const { returnValues: { asset, id } } = log
+          this.setStatus(`${asset} ${id} ${ev}`)
+        })
+    }
+    for (let ev in events2) {
+      events2[ev]()
+        .on('data', (log) => {
+          const { returnValues: { account, name } } = log
+          this.setStatus(`${name} - address ${account}: role ${ev}`)
+        })
+    }
+    InTransit()
+      .on('data', (log) => {
+        const { returnValues: { id } } = log
+        this.setStatus(`Equipment ${id} is in transit`)
+      })
+    Packed()
+      .on('data', (log) => {
+        const { returnValues: { id } } = log
+        this.setStatus(`Equipment ${id} is packed`)
+      })
+    StructureReady()
+      .on('data', (log) => {
+        const { returnValues: { msn } } = log
+        this.setStatus(`Aircraft ${msn} has its structure ready`)
+      })
   },
 
   refreshAccount: async function () {
@@ -63,65 +117,64 @@ const App = {
   },
 
   addRole: async function () {
-    // this.refreshAccount()
+    this.refreshAccount()
     const { addManufacturer, addCustomer, addSupplier, addTransporter } = this.supplyChain.methods
     const address = document.getElementById('roleAddress').value
     const name = document.getElementById('roleName').value
-    const role = document.querySelector('input[name="role"]:checked').value
-    switch (role) {
-      case 'customer':
-        await addCustomer(address, name).send({ from: this.account })
-        this.setStatus(`Customer ${address} added`)
-        break
-      case 'manufacturer':
-        await addManufacturer(address, name).send({ from: this.account })
-        this.setStatus(`Manufacturer ${address} added`)
-        break
-      case 'supplier':
-        await addSupplier(address, name).send({ from: this.account })
-        this.setStatus(`Supplier ${address} added`)
-        break
-      case 'transporter':
-        await addTransporter(address, name).send({ from: this.account })
-        this.setStatus(`Transporter ${address} added`)
-        break
+    try {
+      const role = document.querySelector('input[name="role"]:checked').value
+      switch (role) {
+        case 'customer':
+          await addCustomer(address, name).send({ from: this.account })
+          break
+        case 'manufacturer':
+          await addManufacturer(address, name).send({ from: this.account })
+          break
+        case 'supplier':
+          await addSupplier(address, name).send({ from: this.account })
+          break
+        case 'transporter':
+          await addTransporter(address, name).send({ from: this.account })
+          break
+      }
+    } catch (error) {
+      console.error('Please check one of the radio button')
     }
   },
   renounceRole: async function () {
     const { renounceManufacturer, renounceCustomer, renounceSupplier, renounceTransporter } = this.supplyChain.methods
-    const role = document.querySelector('input[name="role"]:checked').value
-    switch (role) {
-      case 'customer':
-        await renounceCustomer().send({ from: this.account })
-        this.setStatus(`Customer ${this.account} renounced his role`)
-        break
-      case 'manufacturer':
-        await renounceManufacturer().send({ from: this.account })
-        this.setStatus(`Manufacturer ${this.account} renounced his role`)
-        break
-      case 'supplier':
-        await renounceSupplier().send({ from: this.account })
-        this.setStatus(`Supplier ${this.account} renounced his role`)
-        break
-      case 'transporter':
-        await renounceTransporter().send({ from: this.account })
-        this.setStatus(`Transporter ${this.account} renounced his role`)
-        break
+    try {
+      const role = document.querySelector('input[name="role"]:checked').value
+      switch (role) {
+        case 'customer':
+          await renounceCustomer().send({ from: this.account })
+          break
+        case 'manufacturer':
+          await renounceManufacturer().send({ from: this.account })
+          break
+        case 'supplier':
+          await renounceSupplier().send({ from: this.account })
+          break
+        case 'transporter':
+          await renounceTransporter().send({ from: this.account })
+          break
+      }
+    } catch (error) {
+      console.error('Please check one of the radio button')
     }
   },
 
   orderAircraft: async function () {
     this.refreshAccount()
-    const { orderAircraft, msn } = this.supplyChain.methods
+    const { orderAircraft } = this.supplyChain.methods
     const equipmentID = document.getElementById('orderACEqID').value
     const manufacturerID = document.getElementById('orderACManufacturer').value
     await orderAircraft(equipmentID, manufacturerID).send({ from: this.account, value: this.prices.aircraft / 2 })
-    const _msn = await msn().call()
     // msn has been increase by contract so minus 1!
-    this.setStatus(`Aircraft MSN ${_msn - 1} ordered`)
+    // this.setStatus(`Aircraft MSN ${_msn - 1} ordered`)
   },
   orderEquipment: async function () {
-    // this.refreshAccount()
+    this.refreshAccount()
     const { orderEquipment } = this.supplyChain.methods
     const equipmentID = document.getElementById('orderEqID').value
     const supplierID = document.getElementById('orderEqSupplierID').value
@@ -129,13 +182,13 @@ const App = {
     await orderEquipment(equipmentID, supplierID, msn).send({ from: this.account, value: this.prices.equipment })
   },
   receiveEquipment: async function () {
-    // this.refreshAccount()
+    this.refreshAccount()
     const { receiveEquipment } = this.supplyChain.methods
     const equipmentID = document.getElementById('orderEqID').value
     await receiveEquipment(equipmentID).send({ from: this.account, value: this.prices.transport / 2 })
   },
   processEquipment: async function () {
-    // this.refreshAccount()
+    this.refreshAccount()
     const { processEquipment } = this.supplyChain.methods
     const equipmentID = document.getElementById('orderEqID').value
     const notes = document.getElementById('MSNNotes').value
