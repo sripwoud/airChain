@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>AirChain - Ethereum DApp</title>
+  <script src="./index.js"></script>
+</head>
+<body>
+  <header>
+    <nav>
+      <h1 aria-label="title">AirChain - Ethereum DApp</h1>
+    </nav>
+  </header>
+  <main>
+    <section>
+        <h2>Roles management</h2>
+        <label>Ethereum Address
+          <input type="text" id="roleAddress" required>
+        </label>
+        <label>Name
+          <input type="text" id="roleName">
+        </label><br>
+        <radiogroup>
+          <label>Customer
+            <input type="radio" name='role' value='customer'>
+          </label>
+          <label>Manufacturer
+            <input type="radio" name='role' value='manufacturer'>
+          </label>
+          <label>Supplier
+            <input type="radio"  name='role' value='supplier'>
+          </label>
+          <label>Transporter
+            <input type="radio" name='role' value='transporter'>
+          </label><br>
+        </radiogroup>
+        <button onclick='App.addRole()'>Add</button>
+        <button onclick='App.renounceRole()'>Renounce</button><br>
+      </section>
+      <section>
+        <h2>Customer actions</h2>
+        <label>Equipment ID
+          <input type="text" id="orderACEqID">
+        </label>
+        <label>Manufacturer address
+          <input type="text" id="orderACManufacturer">
+        </label>
+        <button id="createStar" onclick='App.orderAircraft()'>Order Aircraft</button><br>
+        <label>MSN
+          <input type="text" id="receiveMSN">
+        </label>
+        <button onclick='App.receiveAircraft()'>Receive Aircraft</button><br>
+      </section>
+      <section>
+        <h2>Manufacturer actions</h2>
+        <label>Equipment ID
+          <input type="text" id="orderEqID">
+        </label>
+        <label>Supplier Address
+          <input type="text" id="orderEqSupplierID">
+        </label><br>
+        <label>MSN
+          <input type="text" id="orderEqMSN">
+        </label>
+        <label>MSN Origin Plant
+          <input type="text" id="MSNOrig">
+        </label>
+        <label>MSN Notes
+          <input type="text" id="MSNNotes"><br>
+        </label>
+        <button onclick='App.orderEquipment()'>Order Equipment</button>
+        <button onclick='App.receiveEquipment()'>Receive Equipment</button>
+        <button onclick='App.prepareStructure()'>Prepare Structure</button>
+        <button onclick='App.processEquipment()'>Process Equipment</button><br>
+      </section>
+      <section>
+        <h2>Supplier actions</h2>
+        <label>Component ID
+          <input type="text" id="compID">
+        </label>
+        <label>Component's manufacturer name
+          <input type="text" id="compManufacturerName">
+        </label>
+        <label>Component's origin
+          <input type="text" id="compOrig">
+        </label><br>
+        <label>Equipment ID
+          <input type="text" id="compEqID">
+        </label>
+        <label>Equipment's origin
+          <input type="text" id="eqOrig">
+        </label>
+        <label>Equipment notes
+          <input type="text" id="eqNotes">
+        </label><br>
+        <label>Transporter Address
+          <input type="text" id="transporterID">
+        </label><br>
+        <button onclick='App.receiveComponent()'>Receive Component</button>
+        <button onclick='App.processComponent()'>Process Component</button>
+        <button onclick='App.packEquipment()'>Pack Equipment</button><br>
+      </section>
+      <section>
+        <h2>Transporter actions</h2>
+        <label>Equipment ID
+          <input type="text" id="transportEqID">
+        </label>
+        <button onclick='App.transportEquipment()'>Transport Equipment</button><br>
+      </section>
+      <section>
+        <h2>Fetch</h2>
+        <h3>User</h3>
+        <label>User Address
+          <input type="text" id='fetchAddress'>
+        </label>
+        <button onclick='App.checkRoles()'>Check Roles</button><br>
+        <h3>Assets</h3>
+        <radiogroup>
+          <label>MSN/ID
+            <input type="text" id='fetchID' required><br>
+          </label>
+          <label>Aircraft
+            <input type="radio" name='asset' value='aircraft'>
+          </label>
+          <label>Equipment
+            <input type="radio" name='asset' value='equipment'>
+          </label>
+          <label>Component
+            <input type="radio" name='asset' value='component'><br>
+          </label>
+          <button onclick='App.fetchAsset()'>Fetch Asset</button>
+        </radiogroup>
+      </section>
+
+  </main>
+  <pre id="status">Status</pre>
+  <footer>
+    <!-- <h2 class="contact_title">Contact</h2>
+    <ul class="contact_wrapper">
+      <li class='contact'>
+        <a href="https://www.linkedin.com/in/griou">
+          <img src="https://s1.qwant.com/thumbr/0x0/9/e/5e84988b12671be8473e18ead3f63ac7310edb6d949566fac06579abc47f84/LinkedIn-Icon.png?u=https%3A%2F%2Fwww.silversands.co.uk%2Fwp-content%2Fuploads%2FLinkedIn-Icon.png&q=0&b=1&p=0&a=1" alt="linkedin_logo">
+        </a>
+      </li>
+      <li class="contact">gauthriou@protonmail.com</li>
+      <li class="contact">
+        <a href="https://github.com/Gry0u">
+          <img src="https://www.shareicon.net/data/2015/09/15/101512_logo_512x512.png" alt="github_logo">
+        </a>
+      </li>
+    </ul> -->
+  </footer>
+</body>
+</html>
