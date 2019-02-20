@@ -370,16 +370,15 @@ contract('SupplyChain', function (accounts) {
     })
   })
 
-  // it('a supplier can withdraw his money', async () => {
-  //   const supplyChain = await SupplyChain.deployed()
-  //   console.log(await supplyChain.pendingWithdrawals(supplierID))
-  //   // console.log(await supplyChain.pendingWithdrawals(supplierID))
-  //   // console.log(await supplyChain.pendingWithdrawals(transporterID))
-  //
-  //   const balanceBefore = await web3.eth.getBalance(supplierID)
-  //   console.log(balanceBefore)
-  //   await supplyChain.withdraw({ from: supplierID })
-  //   // const balanceAfter = await web3.eth.getBalance(ownerID)
-  //   // assert.isAbove(+balanceAfter, +balanceBefore)
-  // })
+  it('a manufacturer can withdraw his money', async () => {
+    const supplyChain = await SupplyChain.deployed()
+    // console.log(await supplyChain.pendingWithdrawals(supplierID))
+    // console.log(await supplyChain.pendingWithdrawals(supplierID))
+    // console.log(await supplyChain.pendingWithdrawals(transporterID))
+    const balanceBefore = await web3.eth.getBalance(manufacturerID)
+    // console.log(balanceBefore)
+    await supplyChain.withdraw({ from: manufacturerID })
+    const balanceAfter = await web3.eth.getBalance(manufacturerID)
+    assert.isAbove(+balanceAfter, +balanceBefore)
+  })
 })
