@@ -2,5 +2,4 @@ app/node_modules
 *.txt
 *.sh
 build
-.infuraKey
-.secret
+.*
