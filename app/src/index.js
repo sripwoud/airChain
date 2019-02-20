@@ -25,12 +25,6 @@ const App = {
     const { web3 } = this
 
     try {
-      // prints for test
-      console.log('Owner: ' + '0x79078A5671D4B53B37BA8e03f1E53950DbF3818F')
-      console.log('Customer: ' + '0x6Cfe6b3861B74A17a4056EC5b491490F538A7b93')
-      console.log('Manufacturer: ' + '0xe2664C8D93AcED44355091bF85F0c4A9f4edE8fF')
-      console.log('Supplier: ' + '0xFeF2B31C16F7a7C17Af4B250d237ddA4A318Ef48')
-      console.log('Transporter: ' + '0xc28f5856bCA516D48f0eF537E55F770E578e50b1')
       // get contract instance
       const networkId = await web3.eth.net.getId()
       const deployedNetwork = supplyChainArtifact.networks[networkId]
@@ -116,6 +110,11 @@ const App = {
     status.innerHTML = message
   },
 
+  withdraw: async function () {
+    const { withdraw } = this.supplyChain.methods
+    await withdraw.send({ from: this.account })
+    this.setStatus(`${this.account} withdrew the payments it received`)
+  },
   addRole: async function () {
     this.refreshAccount()
     const { addManufacturer, addCustomer, addSupplier, addTransporter } = this.supplyChain.methods
