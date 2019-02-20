@@ -37,24 +37,31 @@ $ npm install
 $ cd app
 $ npm install
 ```
-3. Run tests:
+3. Start development network:
 ```
 $ truffle develop
+```
+3. Export first account that will be used as owner of the contract to be deployed:
+```
+$ node writeaccount.js
+```
+4. Test contracts:
+```
 $ truffle(develop)>test
 ```
-4. Metamask
-  - Connect to the Rinkeby network
-  - Look for your mnemonic passphrase in "settings"
-5. Write your Metamask mnemonic in a `.secret` file and save it in `AirChain/`
+4. Deploy contract locally:
+```
+$ migrate --reset
+```
+5. Metamask
+  - 'restore from seed phrase': provide your Truffle mnemonic to import the 10 accounts generated
+  - connect to http://127.0.0.1:9545/
 6. Serve Front-End
 ```
 $ cd app
 $ npm run dev
 ```
 7. Access Front-End at http://localhost:8080
-
-## Contract Detail
-- Contract Address on the Rinkeby network: *xxxxxx*
 
 ## Resources
 - [Truffle](https://www.truffleframework.com/): smart contracts and DAPP development framework.
