@@ -4,21 +4,62 @@ This repository containts an Ethereum DApp that demonstrates a Supply Chain flow
 
 ## Worfklow and User Stories
 ![State diagram](./UML/AC_SupplyChain_StateDiagram.png)
-1. User: orders an Aircraft (AC), indicating the ID of the equipment he wants to get installed on his AC and the address of the manufacturer. He pays half of the AC price upfront.
+1. User:  
+Orders an Aircraft (AC). Pays half of the AC price upfront.  
+*Inputs:*  
+  - *Equipment ID*
+  - *Manufacturer address*  
+
 ![Customer menu](./screenshots/customer_menu.png)
 2. AC manufacturer:
-  - orders the equipment from the supplier, paying the equipment price
+  * Orders the equipment from the supplier. Pays equipment price.  
+  *Inputs:*  
+    - *Equipment ID*
+    - *Supplier ID*
+    - *Manufacturer Serial Number (MSN)*  
 ![Manufacturer menu](./screenshots/manufacturer_menu.png)
-  - prepares the AC structure, indicating notes and origin plant.
-3. Supplier: receives component for the ordered equipment. He indicates the component ID, the equipment ID the component will be integrated in, the name of the component manufacturer and the component's origin.
+  *  prepares the AC structure  
+  *Inputs:*
+    - *Origin Plant*
+    - *Aircraft notes*
+3. Supplier:  
+Receives component for the ordered equipment.  
+*Inputs:*
+  - *Component ID*
+  - *Equipment ID*
+  - *Component manufacturer name (optional)*
+  - *Component's origin (optional)*  
 ![Supplier menu](./screenshots/supplier_menu.png)
-4. Supplier: processes equipment. He indicates notes and the equipment's origin
-5. Supplier: packs equipment, indicating the transporter address. He pays the first half of the transport fee.
-6. Transporter: transports equipment.  
+4. Supplier:  
+Processes equipment. Only the same supplier as the one who was contracted by the manufacturer who ordered a given equipment can process a received component on it.  
+*Inputs:*
+  - *Component ID*
+  - *Equipment Origin (optional)*
+  - *Equipment notes (optional)*
+indicates notes and the equipment's origin
+5. Supplier:  
+Packs equipment. Pays the first half of the transport fee.  
+*Inputs:*
+  - *Equipment ID*
+  - *Transporter address*
+6. Transporter:  
+Transports equipment.  
+*Inputs:*
+  - *Equipment ID*  
 ![Transporter menu](./screenshots/transporter_menu.png)
-7. Manufacturer: receives equipment, paying the second half of the transport fee.
-8. Manufacturer: processes equipment. He indicates new notes.
-9. Customer: receives the ordered AC, paying the second half of the AC price.
+7. Manufacturer:  
+Receives equipment. Pays the second half of the transport fee.  
+*Inputs:*
+  - *Equipment ID*
+8. Manufacturer:  
+Processes equipment.  
+*Inputs:*
+  - *Equipment ID*
+  - *Equipment notes (optional)*
+9. Customer:  
+Receives the ordered AC. Pays the second half of the AC price.  
+*Inputs:*
+  - *MSN*
 
 For further views of the workflow described above, consider looking at the other [UML diagrams](./UML):
 - [Activity diagram](./UML/AC_SupplyChain_ActivityDiagram.png)
