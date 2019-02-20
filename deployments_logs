@@ -1,0 +1,56 @@
+1_initial_migration.js
+======================
+
+   Deploying 'Migrations'
+   ----------------------
+   > transaction hash:    0x38b44098088a5f2e48cd44e5ddcb099ed5d375dd97da3570a1b7f927872f12ea
+   > Blocks: 1            Seconds: 16
+   > contract address:    0x5Ee5a05B29C842D37b9c7659dEddde74a6187257
+   > account:             0x45517697E4fc823BE60a066EcCa8139Ce9C4659e
+   > balance:             18.169915773258085075
+   > gas used:            232981
+   > gas price:           20 gwei
+   > value sent:          0 ETH
+   > total cost:          0.00465962 ETH
+
+   Pausing for 2 confirmations...
+   ------------------------------
+   > confirmation number: 1 (block: 3901764)
+   > confirmation number: 2 (block: 3901765)
+
+   > Saving migration to chain.
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:          0.00465962 ETH
+
+
+2_deploy_contracts.js
+=====================
+
+   Deploying 'SupplyChain'
+   -----------------------
+   > transaction hash:    0x7a261245f1ff26485019248fbd46da36bf008533e85e15d56cb03267c952b096
+   > Blocks: 2            Seconds: 28
+   > contract address:    0xBaC7C73D28545fd816Fa3b8448213225e9a7De09
+   > account:             0x45517697E4fc823BE60a066EcCa8139Ce9C4659e
+   > balance:             18.072353973258085075
+   > gas used:            4836155
+   > gas price:           20 gwei
+   > value sent:          0 ETH
+   > total cost:          0.0967231 ETH
+
+   Pausing for 2 confirmations...
+   ------------------------------
+   > confirmation number: 1 (block: 3901776)
+   > confirmation number: 2 (block: 3901777)
+
+   > Saving migration to chain.
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:           0.0967231 ETH
+
+
+Summary
+=======
+> Total deployments:   1
+> Final cost:          0.0967231 ETH
