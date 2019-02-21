@@ -70,7 +70,7 @@ For further views of the workflow described above, consider looking at the other
 
 ## Getting Started
 **Prerequesites:  
-You will need [Metamask](https://metamask.io/), an [Infura](https://infura.io/) account. Node, npm and Truffle installed.**  
+You will need an [Infura](https://infura.io/) account; [Metamask](https://metamask.io/) in your browser; Node, npm and Truffle installed on your computer.**  
 See [Resources](#resources) for tools and packages' version used.
 
 1. Clone or download this repository.
