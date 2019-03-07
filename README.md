@@ -1,6 +1,6 @@
 # Aircraft manufacturing supply chain DApp
 
-This repository containts an Ethereum DApp that demonstrates a Supply Chain flow between a Customer, a Manufacturer, a Supplier and a Transporter during the manufacturing of an aircraft.  
+Ethereum DApp to manage a Supply Chain flow between a Customer, a Manufacturer, a Supplier and a Transporter during the manufacturing of an aircraft.  
 
 ## Worfklow and User Stories
 ![State diagram](./UML/AC_SupplyChain_StateDiagram.png)
