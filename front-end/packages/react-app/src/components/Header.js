@@ -1,8 +1,21 @@
 import React from 'react'
-import { Heading } from 'rimble-ui'
+import { Heading, Flex, Image } from 'rimble-ui'
+
+import logo from '../ethereumLogo.png'
 
 export default () => {
   return (
-    <Heading fontSize={[3, 4, 6]}>AirChain</Heading>
+    <Flex justifyContent='flex-end' alignItems='center'>
+      <Flex flexGrow={4} alignItems='center'>
+        <Image
+          src={logo}
+          alt='Logo'
+          height={['30px', '40px', '50px']}
+          ml={3}
+          mr={[3, 5, 5]}
+        />
+        <Heading fontSize={[3, 4, 6]}>AirChain</Heading>
+      </Flex>
+    </Flex>
   )
 }
