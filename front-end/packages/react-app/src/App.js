@@ -7,6 +7,7 @@ import { useQuery } from '@apollo/react-hooks'
 import './App.css'
 
 import Layout from './components/Layout'
+import CustomerForm from './components/CustomerForm'
 
 const GET_TRANSFERS = gql`
   {
@@ -40,35 +41,11 @@ function App () {
   }, [loading, error, data])
 
   return (
-    <Layout>
-      <div className='App'>
-        <header className='App-header'>
-          <img src={logo} className='App-logo' alt='react-logo' />
-          <p>
-          Edit <code>packages/react-app/src/App.js</code> and save to reload.
-          </p>
-          {/* Remove the "display: none" style and open the JavaScript console in the browser to see what this function does */}
-          <button onClick={() => readOnchainBalance()} style={{ display: 'none' }}>
-          Read On-Chain Balance
-          </button>
-          <a
-            className='App-link'
-            href='https://ethereum.org/developers/#getting-started'
-            target='_blank'
-            rel='noopener noreferrer'
-            style={{ marginTop: '0px' }}
-          >
-          Learn Ethereum
-          </a>
-          <a className='App-link' href='https://reactjs.org' target='_blank' rel='noopener noreferrer'>
-          Learn React
-          </a>
-          <a className='App-link' href='https://thegraph.com/docs/quick-start' target='_blank' rel='noopener noreferrer'>
-          Learn The Graph
-          </a>
-        </header>
-      </div>
-    </Layout>
+    <div className='App'>
+      <Layout>
+        <CustomerForm />
+      </Layout>
+    </div>
   )
 }
 
