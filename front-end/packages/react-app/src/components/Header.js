@@ -18,30 +18,34 @@ export default () => {
         />
         <Heading fontSize={[3, 4, 6]}>AirChain</Heading>
       </Flex>
-      <Button
+      <Button.Outline
         mx={1}
         onClick={() => changeForm('customer')}
+        size='small'
       >
         Customer
-      </Button>
-      <Button
+      </Button.Outline>
+      <Button.Outline
         mx={1}
         onClick={() => changeForm('supplier')}
+        size='small'
       >
         Supplier
-      </Button>
-      <Button
+      </Button.Outline>
+      <Button.Outline
         mx={1}
         onClick={() => changeForm('manufacturer')}
+        size='small'
       >
         Manufacturer
-      </Button>
-      <Button
+      </Button.Outline>
+      <Button.Outline
         mx={1}
         onClick={() => changeForm('transporter')}
+        size='small'
       >
         Transporter
-      </Button>
+      </Button.Outline>
     </Flex>
   )
 }
