@@ -30,21 +30,25 @@ export default props => {
     <>
       <Heading.h2>Customer actions</Heading.h2>
       <Form onSubmit={onOrder}>
-        <Flex alignItems='center'>
+        <Flex alignItems='center' justifyContent='space-between'>
           <Field
             label='Equipment ID'
-            width={1}
+            width={1 / 2}
+            mx={2}
           >
             <Input
               value={equipmentId}
               type='number'
+              width={1}
               required
               placeholder='id'
-              width={1}
               onChange={event => setEquipmentId(event.target.value)}
             />
           </Field>
-          <Field label='Manufacturer Address' width={1}>
+          <Field
+            label='Manufacturer Address'
+            width={1 / 2}
+          >
             <Input
               value={manufacturer}
               type='text'
@@ -54,12 +58,24 @@ export default props => {
               onChange={event => setManufacturer(event.target.value)}
             />
           </Field>
-          <Button type='submit' width={1 / 2} mt={3}>Order</Button>
+          <Button
+            type='submit'
+            width={1 / 2}
+            mt={3}
+            mx={2}
+          >
+            Order
+          </Button>
         </Flex>
       </Form>
       <Form onSubmit={onReceive}>
-        <Flex>
-          <Field label='MSN' width={1}>
+        <Flex justifyContent='space-between'>
+          <Field
+            label='MSN'
+            width={1 / 3}
+            ml={2}
+            pr={3}
+          >
             <Input
               value={msn}
               type='number'
@@ -71,8 +87,9 @@ export default props => {
           </Field>
           <Button
             type='submit'
-            width={1}
+            width={1 / 3}
             mt='27px'
+            mr={2}
           >
             Receive
           </Button>
