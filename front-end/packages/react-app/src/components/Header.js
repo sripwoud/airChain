@@ -1,9 +1,11 @@
 import React from 'react'
 import { Heading, Flex, Image, Button } from 'rimble-ui'
+import { useStoreActions } from 'easy-peasy'
 
 import logo from '../ethereumLogo.png'
 
 export default () => {
+  const changeForm = useStoreActions(actions => actions.changeForm)
   return (
     <Flex justifyContent='flex-end' alignItems='center'>
       <Flex flexGrow={4} alignItems='center'>
@@ -16,10 +18,30 @@ export default () => {
         />
         <Heading fontSize={[3, 4, 6]}>AirChain</Heading>
       </Flex>
-      <Button mx={1}>Customer</Button>
-      <Button mx={1}>Manufacturer</Button>
-      <Button mx={1}>Transporter</Button>
-      <Button mx={1}>Supplier</Button>
+      <Button
+        mx={1}
+        onClick={() => changeForm('customer')}
+      >
+        Customer
+      </Button>
+      <Button
+        mx={1}
+        onClick={() => changeForm('supplier')}
+      >
+        Supplier
+      </Button>
+      <Button
+        mx={1}
+        onClick={() => changeForm('manufacturer')}
+      >
+        Manufacturer
+      </Button>
+      <Button
+        mx={1}
+        onClick={() => changeForm('transporter')}
+      >
+        Transporter
+      </Button>
     </Flex>
   )
 }
