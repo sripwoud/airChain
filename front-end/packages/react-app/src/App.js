@@ -5,9 +5,13 @@ import { gql } from 'apollo-boost'
 import { ethers } from 'ethers'
 import { useQuery } from '@apollo/react-hooks'
 import './App.css'
+import { useStoreState } from 'easy-peasy'
 
 import Layout from './components/Layout'
 import CustomerForm from './components/CustomerForm'
+import ManufacturerForm from './components/ManufacturerForm'
+import TransporterForm from './components/TransporterForm'
+import SupplierForm from './components/SupplierForm'
 
 const GET_TRANSFERS = gql`
   {
@@ -33,6 +37,23 @@ async function readOnchainBalance () {
 
 function App () {
   const { loading, error, data } = useQuery(GET_TRANSFERS)
+  const form = useStoreState(state => state.form)
+
+  const renderForm = form => {
+    switch (form) {
+      case 'customer':
+        return <CustomerForm />
+
+      case 'supplier':
+        return <SupplierForm />
+
+      case 'manufacturer':
+        return <ManufacturerForm />
+
+      case 'transporter':
+        return <TransporterForm />
+    }
+  }
 
   React.useEffect(() => {
     if (!loading && !error && data && data.transfers) {
@@ -43,7 +64,7 @@ function App () {
   return (
     <div className='App'>
       <Layout>
-        <CustomerForm />
+        {renderForm(form)}
       </Layout>
     </div>
   )
