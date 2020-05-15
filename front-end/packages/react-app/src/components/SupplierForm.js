@@ -10,20 +10,20 @@ import {
 } from 'rimble-ui'
 
 export default props => {
+  const [compId, setCompId] = useState(0)
+  const [compManufacturerName, setCompManufacturerName] = useState('')
+  const [compOrigin, setCompOrigin] = useState('')
   const [equipmentId, setEquipmentId] = useState(0)
-  const [manufacturer, setManufacturer] = useState('')
-  const [msn, setMsn] = useState(0)
-
-  const data = { equipmentId, manufacturer }
+  const [equipmentOrigin, setEquipmentOrigin] = useState('')
+  const [equipmentNotes, setEquipmentNotes] = useState('')
+  const [transporter, setTransporter] = useState('')
 
   const onOrder = async event => {
     event.preventDefault()
-    console.log(data)
   }
 
   const onReceive = async event => {
     event.preventDefault()
-    console.log(msn)
   }
 
   return (
@@ -32,8 +32,62 @@ export default props => {
       <Form onSubmit={onOrder}>
         <Flex alignItems='center' justifyContent='space-between'>
           <Field
+            label='Component ID'
+            width={1 / 4}
+            mx={2}
+          >
+            <Input
+              value={compId}
+              type='number'
+              width={1}
+              required
+              placeholder='id'
+              onChange={event => setCompId(event.target.value)}
+            />
+          </Field>
+          <Field
+            label='Component Manufacturer Name'
+            width={1 / 4}
+            mx={2}
+          >
+            <Input
+              value={compManufacturerName}
+              type='text'
+              required
+              placeholder='Name'
+              width={1}
+              onChange={event => setCompManufacturerName(event.target.value)}
+            />
+          </Field>
+          <Field
+            label='Component Origin'
+            width={1 / 4}
+            mx={2}
+          >
+            <Input
+              value={compOrigin}
+              type='text'
+              required
+              placeholder='Town'
+              width={1}
+              onChange={event => setCompOrigin(event.target.value)}
+            />
+          </Field>
+          <Button
+            type='submit'
+            width={1 / 4}
+            mt={3}
+            mx={2}
+          >
+            Receive Component
+          </Button>
+        </Flex>
+      </Form>
+      <Form onSubmit={onOrder}>
+        <Flex alignItems='center' justifyContent='space-between'>
+          <Field
             label='Equipment ID'
-            width={1 / 2}
+            width={1 / 4}
             mx={2}
           >
             <Input
@@ -46,52 +100,65 @@ export default props => {
             />
           </Field>
           <Field
-            label='Manufacturer Address'
-            width={1 / 2}
+            label='Equipment Origin'
+            width={1 / 4}
+            mx={2}
           >
             <Input
-              value={manufacturer}
+              value={equipmentOrigin}
               type='text'
               required
-              placeholder='0x...'
+              placeholder='Town'
               width={1}
-              onChange={event => setManufacturer(event.target.value)}
+              onChange={event => setEquipmentOrigin(event.target.value)}
+            />
+          </Field>
+          <Field
+            label='Notes'
+            width={1 / 4}
+          >
+            <Input
+              value={equipmentNotes}
+              type='text'
+              required
+              placeholder='Notes'
+              width={1}
+              onChange={event => setEquipmentNotes(event.target.value)}
             />
           </Field>
           <Button
             type='submit'
-            width={1 / 2}
+            width={1 / 4}
             mt={3}
             mx={2}
           >
-            Order
+            Build Equipment
           </Button>
         </Flex>
       </Form>
-      <Form onSubmit={onReceive}>
-        <Flex justifyContent='space-between'>
+      <Form onSubmit={onOrder}>
+        <Flex alignItems='center' justifyContent='space-between'>
           <Field
-            label='MSN'
-            width={1 / 3}
-            ml={2}
-            pr={3}
+            label='Transporter'
+            width={1 / 4}
+            mx={2}
           >
             <Input
-              value={msn}
-              type='number'
-              required
-              placeholder='MSN'
+              value={transporter}
+              type='text'
               width={1}
-              onChange={event => setMsn(event.target.value)}
+              required
+              placeholder='0x..'
+              onChange={event => setTransporter(event.target.value)}
             />
           </Field>
           <Button
             type='submit'
-            width={1 / 3}
-            mt='27px'
-            mr={2}
+            width={1 / 4}
+            mt={3}
+            mx={2}
           >
-            Receive
+            Pack Equipment
           </Button>
         </Flex>
       </Form>
