@@ -1006,7 +1006,7 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.3.1", "@babel/runtime@^7.3.4", "@babel/runtime@^7.4.4", "@babel/runtime@^7.4.5", "@babel/runtime@^7.5.1", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.7.4", "@babel/runtime@^7.8.3", "@babel/runtime@^7.8.4", "@babel/runtime@^7.8.7", "@babel/runtime@^7.9.2":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.3.1", "@babel/runtime@^7.3.4", "@babel/runtime@^7.4.2", "@babel/runtime@^7.4.4", "@babel/runtime@^7.4.5", "@babel/runtime@^7.5.1", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.7.4", "@babel/runtime@^7.8.3", "@babel/runtime@^7.8.4", "@babel/runtime@^7.8.7", "@babel/runtime@^7.9.2":
   version "7.9.6"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.9.6.tgz#a9102eb5cadedf3f31d08a9ecf294af7827ea29f"
   integrity sha512-64AF1xY3OAkFHqOb9s4jpgk1Mm5vDZ4L3acHvAml+53nO1XbXLuDodsVpO4OIUsmemlUHMxNdYMNJmsvOwLrvQ==
@@ -1099,6 +1099,26 @@
   version "0.7.5"
   resolved "https://registry.yarnpkg.com/@emotion/unitless/-/unitless-0.7.5.tgz#77211291c1900a700b8a78cfafda3160d76949ed"
   integrity sha512-OWORNpfjMsSSUBVrRBVGECkhWcULOAJz9ZW8uK9qgxD+87M7jHRcvh/A96XXNhXTLmKcoYSQtBEX7lHMO7YRwg==
+
+"@ethersproject/bytes@>=5.0.0-beta.137":
+  version "5.0.0-beta.138"
+  resolved "https://registry.yarnpkg.com/@ethersproject/bytes/-/bytes-5.0.0-beta.138.tgz#86e1f6c4016443f2b5236627fa656e7c56077a56"
+  integrity sha512-q4vaIthv89RJQ0V6gdzh1xuluJE1uYbnfzBUYTegicaXX6jRTCjDDhyiQhyEnNi7pKrGtuOrR3v3+7WtAR8Imw==
+  dependencies:
+    "@ethersproject/logger" ">=5.0.0-beta.137"
+
+"@ethersproject/keccak256@^5.0.0-beta.130":
+  version "5.0.0-beta.132"
+  resolved "https://registry.yarnpkg.com/@ethersproject/keccak256/-/keccak256-5.0.0-beta.132.tgz#38c128194a88aba690b6aca43cae57df420408d7"
+  integrity sha512-YpkwYGV4nu1QM7Q+mhYKO1bCk/sbiV7AAU/HnHwZhDiwJZSDRwfjiFkAJQpvTbsAR02Ek9LhFEBg4OfLTEhJLg==
+  dependencies:
+    "@ethersproject/bytes" ">=5.0.0-beta.137"
+    js-sha3 "0.5.7"
+
+"@ethersproject/logger@>=5.0.0-beta.137":
+  version "5.0.0-beta.137"
+  resolved "https://registry.yarnpkg.com/@ethersproject/logger/-/logger-5.0.0-beta.137.tgz#781582b8b04d0ced01e9c1608c9887d31d95b8ee"
+  integrity sha512-H36iMhWOY+tco1+o2NZUdQT8Gc6Y9795RSPgvluatvjvyt3X6mHtWXes4F8Rc5N/95px++a/ODYVSkSmlr68+A==
 
 "@graphprotocol/graph-cli@0.18.0":
   version "0.18.0"
@@ -1414,10 +1434,34 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
+"@rimble/connection-banner@^1.2.3":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@rimble/connection-banner/-/connection-banner-1.2.3.tgz#2b6144e9e5b1df9ff6b30e31a51f1e28d4ecb8b0"
+  integrity sha512-IRvOckxfZOyi4LVmDA4N8xJ1ZtZbPyAlp5JXHfGeTOuKPb2BTW2R/yT8niyl7+CddbnkVCJouu2w0TbpX3Mk9w==
+  dependencies:
+    "@rimble/utils" "^1.2.3"
+    rimble-ui "^0.9.1"
+
 "@rimble/icons@^1.0.2":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@rimble/icons/-/icons-1.1.0.tgz#e69bdff01190c304af95fae578a5d1b90f34e14d"
   integrity sha512-lR6cVMe/wum6bi6H5qmUH0wEPvCg269XdYMaRwgxpvqbhu0gytH9vTSMkWhbaBLWjmALONt/qjDCQGCESQ+qbg==
+
+"@rimble/network-indicator@^1.2.3":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@rimble/network-indicator/-/network-indicator-1.2.3.tgz#c1dd10906a08e77556af5229b167ce90f90e5a11"
+  integrity sha512-gHuTaFps8BPwD+FAWDVXFnua8DKQbn4aDdzZWmD0kpK4hCoRmwVz5KUMMGe4ikt4XEyoPHntMXzPrbgLQ9sPww==
+  dependencies:
+    "@rimble/utils" "^1.2.3"
+    rimble-ui "^0.9.1"
+
+"@rimble/utils@^1.2.3":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@rimble/utils/-/utils-1.2.3.tgz#df4b24a7841264d40de984edbac0391d16e192ad"
+  integrity sha512-2KEN5+t9P8LsFijslluz1axoYoJQGMAlVdaW7WFFplvArCzjvTIoAeCdtNoZt8JyJi7ccxbzamavY5vP8rQQDw==
+  dependencies:
+    bowser "^2.2.0"
+    rimble-ui "^0.9.1"
 
 "@sheerun/mutationobserver-shim@^0.3.2":
   version "0.3.3"
@@ -1946,6 +1990,38 @@
     lodash "^4.17.15"
     semver "^7.3.2"
     tsutils "^3.17.1"
+
+"@web3-react/abstract-connector@^6.0.7":
+  version "6.0.7"
+  resolved "https://registry.yarnpkg.com/@web3-react/abstract-connector/-/abstract-connector-6.0.7.tgz#401b3c045f1e0fab04256311be49d5144e9badc6"
+  integrity sha512-RhQasA4Ox8CxUC0OENc1AJJm8UTybu/oOCM61Zjg6y0iF7Z0sqv1Ai1VdhC33hrQpA8qSBgoXN9PaP8jKmtdqg==
+  dependencies:
+    "@web3-react/types" "^6.0.7"
+
+"@web3-react/core@^6.0.9":
+  version "6.0.9"
+  resolved "https://registry.yarnpkg.com/@web3-react/core/-/core-6.0.9.tgz#0c9dd6f9dca1f54368e768130c5be0ffc9eda5ad"
+  integrity sha512-mhYvLLXcnzi75ksdOkPGPo6dagd+z30ziz4169C9wSukq9zozNhwAFVlx5rmXJz/EnHl+AwwYcuGVONwEzifsw==
+  dependencies:
+    "@ethersproject/keccak256" "^5.0.0-beta.130"
+    "@web3-react/abstract-connector" "^6.0.7"
+    "@web3-react/types" "^6.0.7"
+    tiny-invariant "^1.0.6"
+    tiny-warning "^1.0.3"
+
+"@web3-react/injected-connector@^6.0.7":
+  version "6.0.7"
+  resolved "https://registry.yarnpkg.com/@web3-react/injected-connector/-/injected-connector-6.0.7.tgz#1e0be23f51fa07fe6547fe986768a46b74c3a426"
+  integrity sha512-Y7aJSz6pg+MWKtvdyuqyy6LWuH+4Tqtph1LWfiyVms9II9ar/9B/de4R8wh4wjg91wmHkU+D75yP09E/Soh2RA==
+  dependencies:
+    "@web3-react/abstract-connector" "^6.0.7"
+    "@web3-react/types" "^6.0.7"
+    tiny-warning "^1.0.3"
+
+"@web3-react/types@^6.0.7":
+  version "6.0.7"
+  resolved "https://registry.yarnpkg.com/@web3-react/types/-/types-6.0.7.tgz#34a6204224467eedc6123abaf55fbb6baeb2809f"
+  integrity sha512-ofGmfDhxmNT1/P/MgVa8IKSkCStFiyvXe+U5tyZurKdrtTDFU+wJ/LxClPDtFerWpczNFPUSrKcuhfPX1sI6+A==
 
 "@webassemblyjs/ast@1.8.5":
   version "1.8.5"
@@ -3016,6 +3092,11 @@ borc@^2.1.2:
     iso-url "~0.4.7"
     json-text-sequence "~0.1.0"
     readable-stream "^3.6.0"
+
+bowser@^2.2.0:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/bowser/-/bowser-2.9.0.tgz#3bed854233b419b9a7422d9ee3e85504373821c9"
+  integrity sha512-2ld76tuLBNFekRgmJfT2+3j5MIrP6bFict8WAIT3beq+srz1gcKNAdNKMqHqauQt63NmAa88HfP1/Ypa9Er3HA==
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -11253,6 +11334,22 @@ rimble-ui@^0.14.0:
     set-value "^3.0.1"
     styled-system "^5.1.5"
 
+rimble-ui@^0.9.1:
+  version "0.9.8"
+  resolved "https://registry.yarnpkg.com/rimble-ui/-/rimble-ui-0.9.8.tgz#9d4fd612e2ca24b413ffa3b7daa36c418922e8e8"
+  integrity sha512-brhTTh4UwpRZusqclcqrbj2N9zgejIxMty+/gIdCLT0Gsgfz1OZes0OeFDFjqVYCHK5DrRiaCjybpCG+rtfNfw==
+  dependencies:
+    "@d8660091/react-popper" "^1.0.4"
+    "@svgr/rollup" "^4.2.0"
+    clipboard "^2.0.4"
+    ethereum-blockies "^0.1.1"
+    mixin-deep "^2.0.1"
+    polished "^3.2.0"
+    qrcode.react "^0.9.3"
+    rmdi "^1.0.1"
+    set-value "^3.0.1"
+    styled-system "^4.1.0"
+
 rimraf@2.6.3:
   version "2.6.3"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.6.3.tgz#b2d104fe0d8fb27cf9e0a1cda8262dd3833c6cab"
@@ -11274,6 +11371,13 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
   dependencies:
     hash-base "^3.0.0"
     inherits "^2.0.1"
+
+rmdi@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/rmdi/-/rmdi-1.0.1.tgz#0284dacf86105181bc9b14df61df8ba8728631d6"
+  integrity sha512-1oxFIH6/mZrw6HN6M0PCogMf783FUKOD2tZW5HyX+Ok6nUodd4kob2UvzzFtaEx7GuD8KzaQPid/pbFjO5D7uw==
+  dependencies:
+    styled-system "^2.0.0"
 
 rollup-pluginutils@^2.8.1:
   version "2.8.2"
@@ -12191,6 +12295,21 @@ styled-components@^5.1.0:
     shallowequal "^1.1.0"
     supports-color "^5.5.0"
 
+styled-system@^2.0.0:
+  version "2.3.6"
+  resolved "https://registry.yarnpkg.com/styled-system/-/styled-system-2.3.6.tgz#a38c1ffa04a5c35adec46473984e463c48b16f7c"
+  integrity sha512-lGAh/8tC70f5hBUD7w0UOWCKyOBK2AzzWKu9BGzqla/Yjx8PzrvaciA7uATbm493hXTfRrecSdLdrIUET5IYnA==
+  dependencies:
+    prop-types "^15.6.0"
+
+styled-system@^4.1.0:
+  version "4.2.4"
+  resolved "https://registry.yarnpkg.com/styled-system/-/styled-system-4.2.4.tgz#8909f91396c30b92295b4eddec5f7b89f8c8d767"
+  integrity sha512-44X7n09gDvwx7yjquEXsjiNALK0dxGgAJdpO5cb/PdL+D4mhSLKWig4/EhH4vHJLbwu/kumURHyvKxygaBfg0A==
+  dependencies:
+    "@babel/runtime" "^7.4.2"
+    prop-types "^15.7.2"
+
 styled-system@^5.1.5:
   version "5.1.5"
   resolved "https://registry.yarnpkg.com/styled-system/-/styled-system-5.1.5.tgz#e362d73e1dbb5641a2fd749a6eba1263dc85075e"
@@ -12439,7 +12558,12 @@ tiny-emitter@^2.0.0:
   resolved "https://registry.yarnpkg.com/tiny-emitter/-/tiny-emitter-2.1.0.tgz#1d1a56edfc51c43e863cbb5382a72330e3555423"
   integrity sha512-NB6Dk1A9xgQPMoGqC5CVXn123gWyte215ONT5Pp5a0yt4nlEoO1ZWeCwpncaekPHXO60i47ihFnZPiRPjRMq4Q==
 
-tiny-warning@^1.0.2:
+tiny-invariant@^1.0.6:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/tiny-invariant/-/tiny-invariant-1.1.0.tgz#634c5f8efdc27714b7f386c35e6760991d230875"
+  integrity sha512-ytxQvrb1cPc9WBEI/HSeYYoGD0kWnGEOR8RY6KomWLBVhqz0RgTwVO9dLrGz7dC+nN9llyI7OKAgRq8Vq4ZBSw==
+
+tiny-warning@^1.0.2, tiny-warning@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/tiny-warning/-/tiny-warning-1.0.3.tgz#94a30db453df4c643d0fd566060d60a875d84754"
   integrity sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==

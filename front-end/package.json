@@ -1,5 +1,5 @@
 {
-  "name": "@project/monorepo",
+  "name": "@airChain/monorepo",
   "version": "1.0.0",
   "keywords": [
     "ethereum",
@@ -9,14 +9,14 @@
   ],
   "private": true,
   "scripts": {
-    "react-app:build": "yarn workspace @project/react-app build",
-    "react-app:eject": "yarn workspace @project/react-app eject",
-    "react-app:start": "yarn workspace @project/react-app start",
-    "react-app:test": "yarn workspace @project/react-app test",
-    "subgraph:auth": "yarn workspace @project/subgraph auth",
-    "subgraph:codegen": "yarn workspace @project/subgraph codegen",
-    "subgraph:build": "yarn workspace @project/subgraph build",
-    "subgraph:deploy": "yarn workspace @project/subgraph deploy"
+    "react-app:build": "yarn workspace @airChain/react-app build",
+    "react-app:eject": "yarn workspace @airChain/react-app eject",
+    "react-app:start": "yarn workspace @airChain/react-app start",
+    "react-app:test": "yarn workspace @airChain/react-app test",
+    "subgraph:auth": "yarn workspace @airChain/subgraph auth",
+    "subgraph:codegen": "yarn workspace @airChain/subgraph codegen",
+    "subgraph:build": "yarn workspace @airChain/subgraph build",
+    "subgraph:deploy": "yarn workspace @airChain/subgraph deploy"
   },
   "workspaces": {
     "packages": [

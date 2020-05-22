@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
+import * as ethers from 'ethers'
 import {
-  Box,
   Button,
   Field,
   Flex,
@@ -9,26 +9,72 @@ import {
   Input
 } from 'rimble-ui'
 
-export default props => {
-  const [equipmentId, setEquipmentId] = useState(0)
-  const [manufacturer, setManufacturer] = useState('')
-  const [msn, setMsn] = useState(0)
+import { useContract } from '../hooks'
+import { AIRCRAFT_PRICE } from '../constants'
+import { addresses } from '@airChain/contracts'
+import Toast from '../components/Toast'
 
-  const data = { equipmentId, manufacturer }
+export default () => {
+  const contract = useContract()
+
+  const [equipmentId, setEquipmentId] = useState(0)
+  const [manufacturer, setManufacturer] = useState(addresses.accounts.manufacturer.pubKey)
+  const [msn, setMsn] = useState(0)
+  const [showToast, setShowToast] = useState(false)
+  const [toastState, setToastState] = useState('loading')
 
   const onOrder = async event => {
     event.preventDefault()
-    console.log(data)
+    setShowToast(true)
+    setToastState('loading')
+    try {
+      const tx = await contract.orderAircraft(
+        equipmentId,
+        manufacturer,
+        {
+          gasLimit: 900000,
+          value: ethers.utils.parseEther(`${AIRCRAFT_PRICE / 2}`)
+        }
+      )
+      console.log(tx)
+
+      await tx.wait(1)
+      // const { args: { asset, id } } = receipt.events.pop()
+
+      setToastState('success')
+    } catch (error) {
+      console.log(error)
+      setToastState('failed')
+    }
   }
 
   const onReceive = async event => {
     event.preventDefault()
-    console.log(msn)
+    setShowToast(true)
+    setToastState('loading')
+    try {
+      const tx = await contract.receiveAircraft(
+        msn,
+        {
+          gasLimit: 900000,
+          value: ethers.utils.parseEther(`${AIRCRAFT_PRICE / 2}`)
+        }
+      )
+
+      await tx.wait(1)
+      // const { args: { asset, id } } = receipt.events.pop()
+      setToastState('success')
+    } catch (error) {
+      console.log(error)
+      setToastState('failed')
+    }
   }
 
   return (
     <>
-      <Heading.h2>Customer actions</Heading.h2>
+      <Heading fontSize={['20px', '25px', '32px']}>
+        Customer actions
+      </Heading>
       <Form onSubmit={onOrder}>
         <Flex alignItems='center' justifyContent='space-between'>
           <Field
@@ -53,7 +99,6 @@ export default props => {
               value={manufacturer}
               type='text'
               required
-              placeholder='0x...'
               width={1}
               onChange={event => setManufacturer(event.target.value)}
             />
@@ -95,6 +140,7 @@ export default props => {
           </Button>
         </Flex>
       </Form>
+      {showToast ? <Toast state={toastState} /> : null}
     </>
   )
 }
