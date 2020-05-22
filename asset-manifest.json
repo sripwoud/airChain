@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/airchainDev/static/css/main.04998ab5.chunk.css",
-    "main.js": "/airchainDev/static/js/main.76d3706e.chunk.js",
-    "main.js.map": "/airchainDev/static/js/main.76d3706e.chunk.js.map",
-    "runtime-main.js": "/airchainDev/static/js/runtime-main.f5a961f3.js",
-    "runtime-main.js.map": "/airchainDev/static/js/runtime-main.f5a961f3.js.map",
-    "static/js/2.e0bbd42e.chunk.js": "/airchainDev/static/js/2.e0bbd42e.chunk.js",
-    "static/js/2.e0bbd42e.chunk.js.map": "/airchainDev/static/js/2.e0bbd42e.chunk.js.map",
-    "index.html": "/airchainDev/index.html",
-    "precache-manifest.30c04ba01fc3ca6b57466b2f4b71e8f8.js": "/airchainDev/precache-manifest.30c04ba01fc3ca6b57466b2f4b71e8f8.js",
-    "service-worker.js": "/airchainDev/service-worker.js",
-    "static/css/main.04998ab5.chunk.css.map": "/airchainDev/static/css/main.04998ab5.chunk.css.map",
-    "static/js/2.e0bbd42e.chunk.js.LICENSE.txt": "/airchainDev/static/js/2.e0bbd42e.chunk.js.LICENSE.txt",
-    "static/media/ethereumLogo.png": "/airchainDev/static/media/ethereumLogo.0020ce37.png"
+    "main.css": "/airchain/static/css/main.04998ab5.chunk.css",
+    "main.js": "/airchain/static/js/main.76d3706e.chunk.js",
+    "main.js.map": "/airchain/static/js/main.76d3706e.chunk.js.map",
+    "runtime-main.js": "/airchain/static/js/runtime-main.44a27820.js",
+    "runtime-main.js.map": "/airchain/static/js/runtime-main.44a27820.js.map",
+    "static/js/2.723856ed.chunk.js": "/airchain/static/js/2.723856ed.chunk.js",
+    "static/js/2.723856ed.chunk.js.map": "/airchain/static/js/2.723856ed.chunk.js.map",
+    "index.html": "/airchain/index.html",
+    "precache-manifest.f84730914ac86724f4c1ef2fac660290.js": "/airchain/precache-manifest.f84730914ac86724f4c1ef2fac660290.js",
+    "service-worker.js": "/airchain/service-worker.js",
+    "static/css/main.04998ab5.chunk.css.map": "/airchain/static/css/main.04998ab5.chunk.css.map",
+    "static/js/2.723856ed.chunk.js.LICENSE.txt": "/airchain/static/js/2.723856ed.chunk.js.LICENSE.txt",
+    "static/media/ethereumLogo.png": "/airchain/static/media/ethereumLogo.0020ce37.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.f5a961f3.js",
-    "static/js/2.e0bbd42e.chunk.js",
+    "static/js/runtime-main.44a27820.js",
+    "static/js/2.723856ed.chunk.js",
     "static/css/main.04998ab5.chunk.css",
     "static/js/main.76d3706e.chunk.js"
   ]
