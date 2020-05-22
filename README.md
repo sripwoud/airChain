@@ -1,7 +1,6 @@
-# Aircraft manufacturing supply chain DApp
+# [AirChain](https://r1oga.github.io/airchain)
 
 Ethereum DApp to manage a Supply Chain flow between a Customer, a Manufacturer, a Supplier and a Transporter during the manufacturing of an aircraft.  
-[Video Demo](https://www.youtube.com/watch?v=N-suXPYTDV4)
 
 ## Worfklow and User Stories
 ![State diagram](./UML/AC_SupplyChain_StateDiagram.png)
@@ -11,14 +10,12 @@ Orders an Aircraft (AC). Pays half of the AC price upfront.
   - *Equipment ID*
   - *Manufacturer address*  
 
-![Customer menu](./screenshots/customer_menu.png)
 2. AC manufacturer:
   * Orders the equipment from the supplier. Pays equipment price.  
   *Inputs:*  
     - *Equipment ID*
     - *Supplier ID*
     - *Manufacturer Serial Number (MSN)*  
-![Manufacturer menu](./screenshots/manufacturer_menu.png)
   *  prepares the AC structure  
   *Inputs:*
     - *Origin Plant*
@@ -30,7 +27,6 @@ Receives component for the ordered equipment.
   - *Equipment ID*
   - *Component manufacturer name (optional)*
   - *Component's origin (optional)*  
-![Supplier menu](./screenshots/supplier_menu.png)
 4. Supplier:  
 Processes equipment. Only the same supplier as the one who was contracted by the manufacturer who ordered a given equipment can process a received component on it.  
 *Inputs:*
@@ -47,7 +43,6 @@ Packs equipment. Pays the first half of the transport fee.
 Transports equipment.  
 *Inputs:*
   - *Equipment ID*  
-![Transporter menu](./screenshots/transporter_menu.png)
 7. Manufacturer:  
 Receives equipment. Pays the second half of the transport fee.  
 *Inputs:*
@@ -68,33 +63,6 @@ For further views of the workflow described above, consider looking at the other
 
 ## Architecture
 ![Class diagram](./UML/AC_SupplyChain_ClassDiagram.png)
-
-## Getting Started
-**Prerequesites:  
-You will need an [Infura](https://infura.io/) account; [Metamask](https://metamask.io/) in your browser; Node, npm and Truffle installed on your computer.**  
-See [Resources](#resources) for tools and packages' version used.
-
-1. Clone or download this repository.
-2. Install dependencies
-```
-$ cd AirChain
-$ npm install
-$ cd app
-$ npm install
-```
-3. Start development network and test contracts:
-```
-$ cd ..
-$ truffle develop
-$ truffle(develop)>test
-```
-6. Serve Front-End  
-In a second console or close the truffle develop console (`ctrl + c` two times):
-```
-$ cd app
-$ npm run dev
-```
-7. Access Front-End at http://localhost:8080
 
 ## Contract details
 This contract is deployed on the Rinkeby network!  
@@ -132,3 +100,5 @@ So the ETH available on these test accounts aren't worth anything :-p. The priva
 - [Metamask](https://metamask.io/): browser add-in to interact with the JavaScript Ethereum API [Web3](https://github.com/ethereum/web3.js/).
 - [Solidity](https://github.com/ethereum/solidity): language for implementing smart contrats.
 - [Withdrawal pattern](https://solidity.readthedocs.io/en/v0.4.24/common-patterns.html#withdrawal-from-contracts) for smart contracts
+- [Rimble UI](https://rimble.consensys.design/)
+- [create eth app](https://github.com/PaulRBerg/create-eth-app)
