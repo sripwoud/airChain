@@ -18,7 +18,7 @@ export default () => (
       </LinkRimble>
     </p>
     <LinkRimble
-      href='https://github.com/r1oga/AirChain'
+      href='https://github.com/r1oga/airChain'
       target='__blank'
       px={2}
     >
