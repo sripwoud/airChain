@@ -1,17 +1,19 @@
 import React from 'react'
-import logo from './ethereumLogo.png'
-import { addresses, abis } from '@project/contracts'
+import { addresses, abis } from '@airChain/contracts'
 import { gql } from 'apollo-boost'
 import { ethers } from 'ethers'
 import { useQuery } from '@apollo/react-hooks'
 import './App.css'
 import { useStoreState } from 'easy-peasy'
+import { Flex, Box } from 'rimble-ui'
 
 import Layout from './components/Layout'
 import CustomerForm from './components/CustomerForm'
 import ManufacturerForm from './components/ManufacturerForm'
 import TransporterForm from './components/TransporterForm'
 import SupplierForm from './components/SupplierForm'
+import Modal from './components/Modal'
+import Get from './components/Get'
 
 const GET_TRANSFERS = gql`
   {
@@ -36,35 +38,24 @@ async function readOnchainBalance () {
 }
 
 function App () {
-  const { loading, error, data } = useQuery(GET_TRANSFERS)
-  const form = useStoreState(state => state.form)
+  // const { loading, error, data } = useQuery(GET_TRANSFERS)
+  const form = useStoreState(state => state.form.name)
 
-  const renderForm = form => {
-    switch (form) {
-      case 'customer':
-        return <CustomerForm />
-
-      case 'supplier':
-        return <SupplierForm />
-
-      case 'manufacturer':
-        return <ManufacturerForm />
-
-      case 'transporter':
-        return <TransporterForm />
-    }
+  const forms = {
+    customer: <CustomerForm />,
+    supplier: <SupplierForm />,
+    manufacturer: <ManufacturerForm />,
+    transporter: <TransporterForm />
   }
-
-  React.useEffect(() => {
-    if (!loading && !error && data && data.transfers) {
-      console.log({ transfers: data.transfers })
-    }
-  }, [loading, error, data])
 
   return (
     <div className='App'>
+      <Modal />
       <Layout>
-        {renderForm(form)}
+        <Box fontSize={['12px', '14px', '16px']}>
+          {forms[form]}
+          <Get />
+        </Box>
       </Layout>
     </div>
   )

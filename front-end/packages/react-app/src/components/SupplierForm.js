@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import {
-  Box,
   Button,
   Field,
   Flex,
@@ -9,31 +8,94 @@ import {
   Input
 } from 'rimble-ui'
 
+import { useContract } from '../hooks'
+import { TRANSPORT_FEE } from '../constants'
+import { addresses } from '@airChain/contracts'
+import Toast from '../components/Toast'
+
 export default props => {
+  const contract = useContract()
   const [compId, setCompId] = useState(0)
   const [compManufacturerName, setCompManufacturerName] = useState('')
   const [compOrigin, setCompOrigin] = useState('')
+  const [transporter, setTransporter] = useState(addresses.accounts.transporter.pubKey)
   const [equipmentId, setEquipmentId] = useState(0)
   const [equipmentOrigin, setEquipmentOrigin] = useState('')
   const [equipmentNotes, setEquipmentNotes] = useState('')
-  const [transporter, setTransporter] = useState('')
-
-  const onOrder = async event => {
-    event.preventDefault()
-  }
+  const [showToast, setShowToast] = useState(false)
+  const [toastState, setToastState] = useState('loading')
 
   const onReceive = async event => {
     event.preventDefault()
+    setShowToast(true)
+    setToastState('loading')
+    try {
+      const tx = await contract.receiveComponent(
+        compId,
+        compManufacturerName,
+        compOrigin,
+        equipmentId,
+        { gasLimit: 900000 }
+      )
+
+      await tx.wait(1)
+      setToastState('success')
+    } catch (error) {
+      console.log(error)
+      setToastState('failed')
+    }
+  }
+
+  const onBuild = async event => {
+    event.preventDefault()
+    setShowToast(true)
+    setToastState('loading')
+    try {
+      const tx = await contract.processComponent(
+        compId,
+        equipmentOrigin,
+        equipmentNotes,
+        { gasLimit: 900000 }
+      )
+      // wait for 1 confirmation
+      await tx.wait(1)
+      setToastState('success')
+    } catch (error) {
+      console.log(error)
+      setToastState('failed')
+    }
+  }
+
+  const onPack = async event => {
+    event.preventDefault()
+    setShowToast(true)
+    setToastState('loading')
+    try {
+      const tx = await contract.packEquipment(
+        equipmentId,
+        transporter,
+        {
+          gasLimit: 900000,
+          value: +TRANSPORT_FEE / 2
+        }
+      )
+      // wait for 1 confirmation
+      await tx.wait(1)
+      setToastState('success')
+    } catch (error) {
+      console.log(error)
+      setToastState('failed')
+    }
   }
 
   return (
     <>
       <Heading.h2>Supplier actions</Heading.h2>
-      <Form onSubmit={onOrder}>
+      <Form onSubmit={onReceive}>
         <Flex alignItems='center' justifyContent='space-between'>
           <Field
-            label='Component ID'
-            width={1 / 4}
+            label='Part ID'
+            width={1 / 5}
             mx={2}
           >
             <Input
@@ -41,13 +103,12 @@ export default props => {
               type='number'
               width={1}
               required
-              placeholder='id'
               onChange={event => setCompId(event.target.value)}
             />
           </Field>
           <Field
-            label='Component Manufacturer Name'
-            width={1 / 4}
+            label='Part Manufacturer'
+            width={1 / 5}
             mx={2}
           >
             <Input
@@ -60,8 +121,8 @@ export default props => {
             />
           </Field>
           <Field
-            label='Component Origin'
-            width={1 / 4}
+            label='Part Origin'
+            width={1 / 5}
             mx={2}
           >
             <Input
@@ -73,21 +134,9 @@ export default props => {
               onChange={event => setCompOrigin(event.target.value)}
             />
           </Field>
-          <Button
-            type='submit'
-            width={1 / 4}
-            mt={3}
-            mx={2}
-          >
-            Receive Component
-          </Button>
-        </Flex>
-      </Form>
-      <Form onSubmit={onOrder}>
-        <Flex alignItems='center' justifyContent='space-between'>
           <Field
             label='Equipment ID'
-            width={1 / 4}
+            width={1 / 5}
             mx={2}
           >
             <Input
@@ -95,8 +144,32 @@ export default props => {
               type='number'
               width={1}
               required
-              placeholder='id'
               onChange={event => setEquipmentId(event.target.value)}
+            />
+          </Field>
+          <Button
+            type='submit'
+            width={1 / 5}
+            mt={3}
+            mx={2}
+          >
+            Receive Part
+          </Button>
+        </Flex>
+      </Form>
+      <Form onSubmit={onBuild}>
+        <Flex alignItems='center' justifyContent='space-between'>
+          <Field
+            label='Part ID'
+            width={1 / 4}
+            mx={2}
+          >
+            <Input
+              value={compId}
+              type='number'
+              width={1}
+              required
+              onChange={event => setCompId(event.target.value)}
             />
           </Field>
           <Field
@@ -136,8 +209,21 @@ export default props => {
           </Button>
         </Flex>
       </Form>
-      <Form onSubmit={onOrder}>
+      <Form onSubmit={onPack}>
         <Flex alignItems='center' justifyContent='space-between'>
+          <Field
+            label='Equipment ID'
+            width={1 / 5}
+            mx={2}
+          >
+            <Input
+              value={equipmentId}
+              type='number'
+              width={1}
+              required
+              onChange={event => setEquipmentId(event.target.value)}
+            />
+          </Field>
           <Field
             label='Transporter'
             width={1 / 4}
@@ -148,7 +234,6 @@ export default props => {
               type='text'
               width={1}
               required
-              placeholder='0x..'
               onChange={event => setTransporter(event.target.value)}
             />
           </Field>
@@ -162,6 +247,7 @@ export default props => {
           </Button>
         </Flex>
       </Form>
+      {showToast ? <Toast state={toastState} /> : null}
     </>
   )
 }

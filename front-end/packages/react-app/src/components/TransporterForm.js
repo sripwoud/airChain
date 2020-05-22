@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import {
-  Box,
   Button,
   Field,
   Flex,
@@ -9,11 +8,31 @@ import {
   Input
 } from 'rimble-ui'
 
+import { useContract } from '../hooks'
+import Toast from '../components/Toast'
+
 export default props => {
+  const contract = useContract()
   const [equipmentId, setEquipmentId] = useState(0)
+  const [showToast, setShowToast] = useState(false)
+  const [toastState, setToastState] = useState('loading')
 
   const onSubmit = async event => {
     event.preventDefault()
+    setShowToast(true)
+    setToastState('loading')
+    try {
+      const tx = await contract.transportEquipment(
+        equipmentId,
+        { gasLimit: 900000 }
+      )
+
+      await tx.wait(1)
+      setToastState('success')
+    } catch (error) {
+      console.log(error)
+      setToastState('failed')
+    }
   }
 
   return (
@@ -45,6 +64,7 @@ export default props => {
           </Button>
         </Flex>
       </Form>
+      {showToast ? <Toast state={toastState} /> : null}
     </>
   )
 }
