@@ -1,23 +1,23 @@
 {
   "files": {
     "main.css": "/airChain/static/css/main.04998ab5.chunk.css",
-    "main.js": "/airChain/static/js/main.76d3706e.chunk.js",
-    "main.js.map": "/airChain/static/js/main.76d3706e.chunk.js.map",
+    "main.js": "/airChain/static/js/main.03a97f8a.chunk.js",
+    "main.js.map": "/airChain/static/js/main.03a97f8a.chunk.js.map",
     "runtime-main.js": "/airChain/static/js/runtime-main.6c6b745c.js",
     "runtime-main.js.map": "/airChain/static/js/runtime-main.6c6b745c.js.map",
-    "static/js/2.9580f436.chunk.js": "/airChain/static/js/2.9580f436.chunk.js",
-    "static/js/2.9580f436.chunk.js.map": "/airChain/static/js/2.9580f436.chunk.js.map",
+    "static/js/2.f5af1193.chunk.js": "/airChain/static/js/2.f5af1193.chunk.js",
+    "static/js/2.f5af1193.chunk.js.map": "/airChain/static/js/2.f5af1193.chunk.js.map",
     "index.html": "/airChain/index.html",
-    "precache-manifest.6c0ce6b2d9c3e68f9236b582386e0134.js": "/airChain/precache-manifest.6c0ce6b2d9c3e68f9236b582386e0134.js",
+    "precache-manifest.d4b00dd4eb08d36c621ac563084befa3.js": "/airChain/precache-manifest.d4b00dd4eb08d36c621ac563084befa3.js",
     "service-worker.js": "/airChain/service-worker.js",
     "static/css/main.04998ab5.chunk.css.map": "/airChain/static/css/main.04998ab5.chunk.css.map",
-    "static/js/2.9580f436.chunk.js.LICENSE.txt": "/airChain/static/js/2.9580f436.chunk.js.LICENSE.txt",
+    "static/js/2.f5af1193.chunk.js.LICENSE.txt": "/airChain/static/js/2.f5af1193.chunk.js.LICENSE.txt",
     "static/media/ethereumLogo.png": "/airChain/static/media/ethereumLogo.0020ce37.png"
   },
   "entrypoints": [
     "static/js/runtime-main.6c6b745c.js",
-    "static/js/2.9580f436.chunk.js",
+    "static/js/2.f5af1193.chunk.js",
     "static/css/main.04998ab5.chunk.css",
-    "static/js/main.76d3706e.chunk.js"
+    "static/js/main.03a97f8a.chunk.js"
   ]
 }
