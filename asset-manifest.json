@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/airChain/static/css/main.04998ab5.chunk.css",
-    "main.js": "/airChain/static/js/main.03a97f8a.chunk.js",
-    "main.js.map": "/airChain/static/js/main.03a97f8a.chunk.js.map",
+    "main.js": "/airChain/static/js/main.2717b966.chunk.js",
+    "main.js.map": "/airChain/static/js/main.2717b966.chunk.js.map",
     "runtime-main.js": "/airChain/static/js/runtime-main.6c6b745c.js",
     "runtime-main.js.map": "/airChain/static/js/runtime-main.6c6b745c.js.map",
     "static/js/2.f5af1193.chunk.js": "/airChain/static/js/2.f5af1193.chunk.js",
     "static/js/2.f5af1193.chunk.js.map": "/airChain/static/js/2.f5af1193.chunk.js.map",
     "index.html": "/airChain/index.html",
-    "precache-manifest.d4b00dd4eb08d36c621ac563084befa3.js": "/airChain/precache-manifest.d4b00dd4eb08d36c621ac563084befa3.js",
+    "precache-manifest.55c331fd5c77e9f954b366667baac1bc.js": "/airChain/precache-manifest.55c331fd5c77e9f954b366667baac1bc.js",
     "service-worker.js": "/airChain/service-worker.js",
     "static/css/main.04998ab5.chunk.css.map": "/airChain/static/css/main.04998ab5.chunk.css.map",
     "static/js/2.f5af1193.chunk.js.LICENSE.txt": "/airChain/static/js/2.f5af1193.chunk.js.LICENSE.txt",
@@ -18,6 +18,6 @@
     "static/js/runtime-main.6c6b745c.js",
     "static/js/2.f5af1193.chunk.js",
     "static/css/main.04998ab5.chunk.css",
-    "static/js/main.03a97f8a.chunk.js"
+    "static/js/main.2717b966.chunk.js"
   ]
 }

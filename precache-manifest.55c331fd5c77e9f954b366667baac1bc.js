@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "46100e3738f1ce2ee625c697e3aa952f",
+    "revision": "0e5183f1d3161142ae99741123e3e50b",
     "url": "/airChain/index.html"
   },
   {
-    "revision": "0cfb65841cc49ff67b38",
+    "revision": "8d494a6190c82ca45c6f",
     "url": "/airChain/static/css/main.04998ab5.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/airChain/static/js/2.f5af1193.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "0cfb65841cc49ff67b38",
-    "url": "/airChain/static/js/main.03a97f8a.chunk.js"
+    "revision": "8d494a6190c82ca45c6f",
+    "url": "/airChain/static/js/main.2717b966.chunk.js"
   },
   {
     "revision": "7826ade36b99a5dbb5fb",
