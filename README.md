@@ -8,35 +8,35 @@ Ethereum DApp to manage a Supply Chain flow between a Customer, a Manufacturer, 
 ![State diagram](./UML/AC_SupplyChain_StateDiagram.png)
 1. User  
 Orders an Aircraft (AC). Pays half of the AC price upfront.  
-*Inputs: Equipment ID, Manufacturer address*  
+*Inputs: Equipment ID, Manufacturer address.*
 2. AC manufacturer  
-  - Orders the equipment from the supplier. Pays equipment price.  
-  *Inputs: Equipment ID, Supplier ID, Manufacturer Serial Number (MSN)*  
-  - Prepares the AC structure  
-  *Inputs:Origin Plant, Aircraft notes*
+    - Orders the equipment from the supplier. Pays equipment price.  
+    *Inputs: Equipment ID, Supplier ID, Manufacturer Serial Number (MSN).*
+    - Prepares the AC structure  
+    *Inputs: Origin Plant, Aircraft notes.*
 3. Supplier  
 Receives component for the ordered equipment.  
-*Inputs: Component ID, Equipment ID, Component manufacturer name (optional), Component's origin (optional)*  
+*Inputs: Component ID, Equipment ID, Component manufacturer name (optional),
+Component's origin (optional).*
 4. Supplier  
-Processes equipment. Only the same supplier as the one who was contracted by the manufacturer (who ordered the given equipment) can process a received component on it. Indicates notes and the equipment's origin
-*Inputs: Component ID, Equipment Origin (optional), Equipment notes (optional)*
+Processes equipment. Only the same supplier as the one who was contracted by the manufacturer (who ordered the given equipment) can process a received component on it. Indicates notes and the equipment's origin.  
+*Inputs: Component ID, Equipment Origin (optional), Equipment notes (optional).*
 
 5. Supplier  
 Packs equipment. Pays the first half of the transport fee.  
-*Inputs: Equipment ID, Transporter address*
+*Inputs: Equipment ID, Transporter address.*
 6. Transporter  
 Transports equipment.  
-*Inputs:*
-  - *Equipment ID*  
+*Input: Equipment ID.*
 7. Manufacturer:  
 Receives equipment. Pays the second half of the transport fee.  
-*Input: Equipment ID*
+*Input: Equipment ID.*
 8. Manufacturer  
 Processes equipment.  
-*Inputs: Equipment ID, Equipment notes (optional)*
+*Inputs: Equipment ID, Equipment notes (optional).*
 9. Customer  
 Receives the ordered AC. Pays the second half of the AC price.  
-*Input: MSN*
+*Input: MSN.*
 
 For further views of the workflow described above, consider looking at the other [UML diagrams](./UML):
 - [Activity diagram](./UML/AC_SupplyChain_ActivityDiagram.png)
