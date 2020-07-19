@@ -26,8 +26,9 @@ Packs equipment. Pays the first half of the transport fee.
 *Inputs: Equipment ID, Transporter address*
 6. Transporter  
 Transports equipment.  
-*Input: Equipment ID*  
-7. Manufacturer  
+*Inputs:*
+  - *Equipment ID*  
+7. Manufacturer:  
 Receives equipment. Pays the second half of the transport fee.  
 *Input: Equipment ID*
 8. Manufacturer  
