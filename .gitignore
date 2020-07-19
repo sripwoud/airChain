@@ -1,5 +1,5 @@
-app/node_modules
-*.txt
-*.sh
+node_modules
 build
-.*
+.infuraKey
+.mnemonic
+
