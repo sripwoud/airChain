@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/r1oga/airChain.git"
+    "url": "git+https://github.com/sripwoud/airChain.git"
   },
-  "author": "r1oga",
-  "license": "ISC",
+  "author": "sripwoud",
+  "license": "AGPL-3.0",
   "bugs": {
-    "url": "https://github.com/r1oga/airChain/issues"
+    "url": "https://github.com/sripwoud/airChain/issues"
   },
-  "homepage": "https://github.com/r1oga/airChain#readme",
+  "homepage": "https://github.com/sripwoud/airChain#readme",
   "dependencies": {
     "any-promise": "^1.3.0",
     "bindings": "^1.4.0",

@@ -11,14 +11,14 @@ export default () => (
   >
     <p>Made by
       <LinkRimble
-        href='https://twitter.com/r1oga'
+        href='https://sripwoud.xyz'
         target='__blank'
         px={2}
-      >@r1oga
+      >sripwoud
       </LinkRimble>
     </p>
     <LinkRimble
-      href='https://github.com/r1oga/airChain'
+      href='https://github.com/sripwoud/airChain'
       target='__blank'
       px={2}
     >
